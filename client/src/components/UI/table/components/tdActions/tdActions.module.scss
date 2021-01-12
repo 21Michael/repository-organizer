@@ -1,0 +1,28 @@
+.td {
+    flex-grow: 1;
+    text-align: justify;
+    display: flex;
+    border: 1px solid black;
+    width: 12%;
+}
+
+.edit {
+    border-right: 2px solid black;
+}
+
+.edit,
+.delete {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-grow: 1;
+    cursor: pointer;
+}
+
+.delete:hover {
+    color: #e50000ff;
+}
+
+.edit:hover {
+    color: #419d20;
+}

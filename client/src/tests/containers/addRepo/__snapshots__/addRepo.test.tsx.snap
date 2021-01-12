@@ -1,0 +1,130 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`addRepo:  addRepo 1`] = `
+<div>
+  <div
+    class="wrapper"
+  >
+    <form
+      class="form"
+    >
+      <h1
+        class="title"
+      >
+         
+        Add a repository
+         
+      </h1>
+      <div
+        class="wrapper"
+      >
+        <label
+          class="label"
+        >
+          Name
+          :
+          <div
+            class="wrapper"
+          >
+            <input
+              class="input"
+              name="name"
+              type="text"
+              value=""
+            />
+            <span
+              class="input__inform"
+            />
+          </div>
+        </label>
+        <label
+          class="label"
+        >
+          Description
+          :
+          <div
+            class="wrapper"
+          >
+            <textarea
+              class="input"
+              name="description"
+              rows="7"
+            />
+            <span
+              class="input__inform"
+            />
+          </div>
+        </label>
+        <label
+          class="label"
+        >
+          Stars
+          :
+          <div
+            class="wrapper"
+          >
+            <input
+              class="input"
+              name="stars"
+              type="number"
+              value=""
+            />
+            <span
+              class="input__inform"
+            />
+          </div>
+        </label>
+        <label
+          class="label"
+        >
+          Creator Name
+          :
+          <div
+            class="wrapper"
+          >
+            <input
+              class="input"
+              name="creatorName"
+              type="text"
+              value=""
+            />
+            <span
+              class="input__inform"
+            />
+          </div>
+        </label>
+        <label
+          class="label"
+        >
+          Created At
+          :
+          <div
+            class="wrapper"
+          >
+            <input
+              class="input"
+              name="createdAt"
+              type="date"
+              value="2020-11-17"
+            />
+            <span
+              class="input__inform"
+            />
+          </div>
+        </label>
+      </div>
+      <div
+        class="wrapper"
+      >
+        <button
+          class="button null"
+          name="submit"
+          type="submit"
+        >
+          Save
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+`;

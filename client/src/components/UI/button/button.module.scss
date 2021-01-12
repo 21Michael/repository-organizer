@@ -1,0 +1,29 @@
+.button {
+  border-radius: 5px;
+  padding: 12px 30px;
+  font-family: sans-serif;
+  font-size: 1.1em;
+  line-height: 1em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #192024;
+  color: white;
+}
+
+.button:hover {
+  cursor: pointer;
+  box-shadow: 3px 3px 1px orange;
+}
+
+.logoutButton {
+  text-transform: inherit;
+  border-radius: 0;
+  border-left: 2px solid #ccc;
+  border-right: 2px solid #ccc;
+}
+.logoutButton:hover {
+  text-decoration: underline;
+  cursor: pointer;
+  box-shadow: none;
+}

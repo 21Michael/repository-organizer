@@ -1,0 +1,14 @@
+.notification {
+  position: absolute;
+  top: 0;
+  width: 100%;
+  padding: 5px;
+  text-align: center;
+  font-size: 1.1em;
+  color: white;
+  background-color: rgba(68, 153, 68, 0.5);
+}
+
+.error {
+  background-color: rgba(153, 68, 68, 0.5);
+}

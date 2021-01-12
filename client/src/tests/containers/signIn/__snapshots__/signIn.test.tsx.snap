@@ -1,0 +1,101 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`SignIn:  signIn 1`] = `
+<div>
+  <div
+    class="wrapper"
+  >
+    <form
+      class="form"
+    >
+      <h1
+        class="title"
+      >
+         
+        Authorization
+         
+      </h1>
+      <div
+        class="wrapper"
+      >
+        <label
+          class="label"
+        >
+          Email
+          :
+          <div
+            class="wrapper"
+          >
+            <input
+              autocomplete="email"
+              class="input"
+              name="email"
+              placeholder="email@gmail.com"
+              type="email"
+              value=""
+            />
+            <span
+              class="input__inform"
+            />
+          </div>
+        </label>
+        <label
+          class="label"
+        >
+          Password
+          :
+          <div
+            class="wrapper"
+          >
+            <input
+              autocomplete="current-password"
+              class="input"
+              name="password"
+              placeholder="********"
+              type="password"
+              value=""
+            />
+            <span
+              class="input__inform"
+            />
+          </div>
+        </label>
+      </div>
+      <div
+        class="wrapper"
+      >
+        <button
+          class="button null"
+          name="submit"
+          type="submit"
+        >
+          Sign In
+        </button>
+        <div
+          class="buttonLink signup"
+        >
+          <a
+            class="link"
+            href="/signup"
+          >
+            Sign Up
+          </a>
+        </div>
+      </div>
+      <div
+        class="wrapper"
+      >
+        <a
+          class="link"
+          href="http://localhost:3000/auth/github"
+        >
+          <span>
+            sign with 
+            github
+          </span>
+        </a>
+      </div>
+    </form>
+  </div>
+</div>
+`;

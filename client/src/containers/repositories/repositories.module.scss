@@ -1,0 +1,14 @@
+.main {
+  position: relative;
+  overflow: hidden;
+  flex-grow: 1;
+  border-right: 2px solid #ccc;
+  border-left: 2px solid #ccc;
+}
+.main__wrapper {
+  max-width: 1255px;
+  width: 100%;
+  padding: 0 20px;
+  margin-left: auto;
+  margin-right: auto;
+}

@@ -1,0 +1,16 @@
+
+.link {
+    font-size: 1.1em;
+    line-height: 1em;;
+    font-family: sans-serif;
+	display: flex;
+    padding: 12px 30px;
+    align-items: center;
+    justify-content: center;
+    color: white;
+}
+
+.link:hover {
+    cursor: pointer;
+    box-shadow: 3px 3px 1px orange;
+}

@@ -1,0 +1,122 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`SignUp:  signUp 1`] = `
+<div>
+  <div
+    class="wrapper"
+  >
+    <form
+      class="form"
+    >
+      <h1
+        class="title"
+      >
+         
+        Create an account
+         
+      </h1>
+      <div
+        class="wrapper"
+      >
+        <label
+          class="label"
+        >
+          User name
+          :
+          <div
+            class="wrapper"
+          >
+            <input
+              autocomplete="user-name"
+              class="input"
+              name="user"
+              placeholder="Surname Name"
+              type="text"
+              value=""
+            />
+            <span
+              class="input__inform"
+            />
+          </div>
+        </label>
+        <label
+          class="label"
+        >
+          Email
+          :
+          <div
+            class="wrapper"
+          >
+            <input
+              autocomplete="email"
+              class="input"
+              name="email"
+              placeholder="email@gmail.com"
+              type="email"
+              value=""
+            />
+            <span
+              class="input__inform"
+            />
+          </div>
+        </label>
+        <label
+          class="label"
+        >
+          Create a password
+          :
+          <div
+            class="wrapper"
+          >
+            <input
+              autocomplete="new-password"
+              class="input"
+              name="password"
+              placeholder="********"
+              type="password"
+              value=""
+            />
+            <span
+              class="input__inform"
+            >
+              2 uppercase, 3 lowercase, 2 digits, 1 symbol
+            </span>
+          </div>
+        </label>
+        <label
+          class="label"
+        >
+          Confirm the password
+          :
+          <div
+            class="wrapper"
+          >
+            <input
+              autocomplete="new-password"
+              class="input"
+              name="passwordConfirm"
+              placeholder="********"
+              type="password"
+              value=""
+            />
+            <span
+              class="input__inform"
+            />
+          </div>
+        </label>
+      </div>
+      <div
+        class="wrapper"
+      >
+        <button
+          class="button null"
+          name="submit"
+          type="submit"
+        >
+          Sign Up
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+`;

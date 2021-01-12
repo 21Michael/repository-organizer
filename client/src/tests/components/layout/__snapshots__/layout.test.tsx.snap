@@ -1,0 +1,276 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`layout:  Route: / 1`] = `
+<main
+  class="main"
+>
+  <div
+    class="main__wrapper"
+  >
+    <div
+      class="table__wrapper"
+    >
+      <table
+        class="table"
+      >
+        <thead
+          class="table__head"
+        >
+          <tr
+            class="tr"
+          >
+            <th
+              class="th"
+            >
+              name
+            </th>
+            <th
+              class="th"
+            >
+              description
+            </th>
+            <th
+              class="th"
+            >
+              stars
+            </th>
+            <th
+              class="th"
+            >
+              creator name
+            </th>
+            <th
+              class="th"
+            >
+              created at
+            </th>
+          </tr>
+        </thead>
+        <tbody
+          class="table__body"
+        />
+      </table>
+    </div>
+  </div>
+</main>
+`;
+
+exports[`layout:  Route: /note 1`] = `
+<main
+  class="main"
+>
+  <div
+    class="main__wrapper"
+  >
+    <div
+      class="table__wrapper"
+    >
+      <table
+        class="table"
+      >
+        <thead
+          class="table__head"
+        >
+          <tr
+            class="tr"
+          >
+            <th
+              class="th"
+            >
+              name
+            </th>
+            <th
+              class="th"
+            >
+              description
+            </th>
+            <th
+              class="th"
+            >
+              stars
+            </th>
+            <th
+              class="th"
+            >
+              creator name
+            </th>
+            <th
+              class="th"
+            >
+              created at
+            </th>
+          </tr>
+        </thead>
+        <tbody
+          class="table__body"
+        />
+      </table>
+    </div>
+  </div>
+</main>
+`;
+
+exports[`layout:  Route: /repository/details 1`] = `
+<main
+  class="main"
+>
+  <div
+    class="main__wrapper"
+  >
+    <div
+      class="table__wrapper"
+    >
+      <table
+        class="table"
+      >
+        <thead
+          class="table__head"
+        >
+          <tr
+            class="tr"
+          >
+            <th
+              class="th"
+            >
+              name
+            </th>
+            <th
+              class="th"
+            >
+              description
+            </th>
+            <th
+              class="th"
+            >
+              stars
+            </th>
+            <th
+              class="th"
+            >
+              creator name
+            </th>
+            <th
+              class="th"
+            >
+              created at
+            </th>
+          </tr>
+        </thead>
+        <tbody
+          class="table__body"
+        />
+      </table>
+    </div>
+  </div>
+</main>
+`;
+
+exports[`layout:  Route: /signin 1`] = `
+<main
+  class="main"
+>
+  <div
+    class="main__wrapper"
+  >
+    <div
+      class="table__wrapper"
+    >
+      <table
+        class="table"
+      >
+        <thead
+          class="table__head"
+        >
+          <tr
+            class="tr"
+          >
+            <th
+              class="th"
+            >
+              name
+            </th>
+            <th
+              class="th"
+            >
+              description
+            </th>
+            <th
+              class="th"
+            >
+              stars
+            </th>
+            <th
+              class="th"
+            >
+              creator name
+            </th>
+            <th
+              class="th"
+            >
+              created at
+            </th>
+          </tr>
+        </thead>
+        <tbody
+          class="table__body"
+        />
+      </table>
+    </div>
+  </div>
+</main>
+`;
+
+exports[`layout:  Route: /signup 1`] = `
+<main
+  class="main"
+>
+  <div
+    class="main__wrapper"
+  >
+    <div
+      class="table__wrapper"
+    >
+      <table
+        class="table"
+      >
+        <thead
+          class="table__head"
+        >
+          <tr
+            class="tr"
+          >
+            <th
+              class="th"
+            >
+              name
+            </th>
+            <th
+              class="th"
+            >
+              description
+            </th>
+            <th
+              class="th"
+            >
+              stars
+            </th>
+            <th
+              class="th"
+            >
+              creator name
+            </th>
+            <th
+              class="th"
+            >
+              created at
+            </th>
+          </tr>
+        </thead>
+        <tbody
+          class="table__body"
+        />
+      </table>
+    </div>
+  </div>
+</main>
+`;

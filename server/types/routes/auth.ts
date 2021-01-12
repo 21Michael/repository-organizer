@@ -1,0 +1,1 @@
+export interface DbError extends Error { code: number };

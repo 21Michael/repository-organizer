@@ -1,0 +1,23 @@
+
+.item {
+    border-radius: 15px 15px 0px 0px;
+    overflow: hidden;
+    border: 2px solid #ccc;
+    border-bottom: none;
+    transform: matrix(1, 0, 0, 1, 0, 6);
+}
+
+.item:hover {
+    transition: .1s;
+    transform: matrix(1, 0, 0, 1, 0, 3);
+}
+
+.item a {
+    padding-bottom: 15px;
+}
+
+.item a:hover {
+    background-color: white;
+    color: black;
+}
+

@@ -1,0 +1,21 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Notes:  notes 1`] = `
+<div>
+  <main
+    class="main"
+  >
+    <div
+      class="alert__wrapper"
+    >
+      <div
+        class="alert"
+      >
+        <p>
+          Please login for making notes
+        </p>
+      </div>
+    </div>
+  </main>
+</div>
+`;

@@ -1,0 +1,20 @@
+.userInfo {
+    display: flex;
+    align-items: center;
+    color: white;
+    padding: 0 30px;
+
+}
+
+.link {
+    z-index: 1;
+    display: flex;
+    margin-left: 20px;
+    border-radius: 5px;
+    border: 2px solid #ccc;  
+}
+
+.link img {
+    width: 40px;
+}
+

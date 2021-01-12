@@ -1,0 +1,27 @@
+.header {
+    position: relative;
+    z-index: 999;
+    width: 100%;
+    overflow: hidden;
+    border: 2px solid #ccc;
+    border-top: none;
+    text-transform: capitalize;
+    font-size: 1.2em;
+}
+
+.header__wrapper {
+    padding: 0 20px;
+    display: flex;
+}
+
+.auth {
+    display: flex;
+}
+.auth a {
+    border-left: 2px solid #ccc;
+    border-right: 2px solid #ccc;
+}
+.auth a:hover {
+    text-decoration: underline;
+    box-shadow: none;
+}

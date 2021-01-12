@@ -1,0 +1,35 @@
+.main {
+    position: relative;
+    overflow: hidden;
+    flex-grow: 1;
+    border-right: 2px solid #ccc;
+    border-left: 2px solid #ccc;
+    display: flex;
+}
+
+.main__wrapper {
+    max-width: 1255px;
+    width: 100%;
+    padding: 0 20px;
+    margin-left: auto;
+    margin-right: auto;
+}
+.alert__wrapper {
+    flex-grow: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%; 
+}
+.alert {
+    font-size: 1.3em;
+    color: white;
+    padding: 20px;
+    border-radius: 5px;
+    background-color: hsla(0, 0%, 50%, 0.5);
+    display: flex;
+}
+
+.alert p{
+    margin-left: 20px;
+}

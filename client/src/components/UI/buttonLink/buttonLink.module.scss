@@ -1,0 +1,35 @@
+.buttonLink {
+    display: flex;
+}
+
+.buttonLink.add {
+    margin-top: 20px;
+}
+
+.buttonLink.add a {
+    border-radius: 5px;
+    color: white;
+    border: 2px solid #ccc;
+}
+
+.buttonLink.add a:hover {
+    color: black;
+    box-shadow: none;
+    background-color: white;
+}
+
+.buttonLink.signup a {
+    border-radius: 5px;
+    border: none;
+}
+
+.buttonLink.signup a:hover {
+    color: white;
+    cursor: pointer;
+    box-shadow: 3px 3px 1px orange;
+}
+
+.buttonLink.signup a {
+    background-color: hsla(210, 50%, 32%, 1);
+    margin-left: 20px;
+}

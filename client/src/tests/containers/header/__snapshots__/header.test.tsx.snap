@@ -1,0 +1,53 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Header:  header 1`] = `
+<div>
+  <header
+    class="header"
+  >
+    <div
+      class="header__wrapper"
+    >
+      <nav
+        class="nav"
+      >
+        <ul
+          class="list"
+        >
+          <li
+            class="item"
+          >
+            <a
+              aria-current="page"
+              class="link active"
+              href="/"
+            >
+              repository
+            </a>
+          </li>
+          <li
+            class="item"
+          >
+            <a
+              class="link"
+              href="/note"
+            >
+              note
+            </a>
+          </li>
+        </ul>
+      </nav>
+      <div
+        class="auth"
+      >
+        <a
+          class="link"
+          href="/signin"
+        >
+          login
+        </a>
+      </div>
+    </div>
+  </header>
+</div>
+`;

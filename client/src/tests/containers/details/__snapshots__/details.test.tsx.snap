@@ -1,0 +1,37 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Details:  details 1`] = `
+<div>
+  <div
+    class="wrapper"
+  >
+    <div
+      class="details"
+    >
+      <div
+        class="wrapper"
+      >
+        <h2
+          class="title"
+        >
+          undefined details
+        </h2>
+        <ul
+          class="list"
+        />
+      </div>
+      <div
+        class="button__wrapper"
+      >
+        <button
+          class="button null"
+          name="button"
+          type="button"
+        >
+          back
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+`;

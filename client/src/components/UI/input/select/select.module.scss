@@ -1,0 +1,15 @@
+.select__wrapper {
+    position: relative;
+   	min-width: 300px;
+    margin-top: 10px;
+    font-family:  auto;
+}
+
+.input__error {
+    position: absolute;
+    bottom: -16px;
+    left: 5px;
+    font-size: 0.7em;
+    font-style: italic;
+    color: red;
+}

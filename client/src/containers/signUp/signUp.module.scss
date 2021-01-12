@@ -1,0 +1,9 @@
+.wrapper {
+  position: relative;
+  flex-grow: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-right: 2px solid #ccc;
+  border-left: 2px solid #ccc;
+}
