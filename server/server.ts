@@ -17,6 +17,8 @@ const cookieOptions: CookieOptions = {
   keys: [process.env.COOKIE_KEY],
   resave: false,
   saveUninitialized: false,
+  secure: true,
+  httpOnly: true
 }
 
 app.use(morgan("combined", morganOption));
@@ -24,7 +26,6 @@ app.use(cors());
 app.use(express.json());
 app.use(cookieSession(cookieOptions));
 app.use(passport.initialize());
-app.use(passport.session());
 
 const mode: string = process.env.NODE_ENV;
 

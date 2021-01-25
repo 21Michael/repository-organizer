@@ -77,7 +77,6 @@ const SignIn: React.FC<Props> = (props) => {
         type: "submit",
         label: "Sign In",
       },
-
       signUp: {
         type: "link",
         label: "Sign Up",
@@ -92,6 +91,7 @@ const SignIn: React.FC<Props> = (props) => {
       },
     },
   };
+  
   const [form, setForm] = useState<InitialState>(initialState);
 
   const onChangeHandler: OnChangeHandler = (value, input) => {

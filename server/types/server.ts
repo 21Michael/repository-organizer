@@ -3,4 +3,6 @@ export interface CookieOptions {
     keys: string[],
     resave: boolean,
     saveUninitialized: boolean,
+    secure: boolean,
+    httpOnly: boolean
 }

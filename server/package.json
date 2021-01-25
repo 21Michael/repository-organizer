@@ -5,11 +5,11 @@
   "main": "server.ts",
   "scripts": {
     "start": "tsc && nodemon server.ts",
-    "production": "SET NODE_ENV=production && nodemon server.ts",
+    "production": "NODE_ENV=production && nodemon server.ts",
     "test": "tsc && jest dist/tests/index"
   },
   "keywords": [
-    "mern"
+    "MERN"
   ],
   "author": "Mikhail Rudiev",
   "license": "ISC",
@@ -31,6 +31,7 @@
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "jsdom": "^16.4.0",
+    "jsonwebtoken": "^8.5.1",
     "mongo": "^0.1.0",
     "mongodb-memory-server": "^6.9.2",
     "mongoose": "^5.10.0",

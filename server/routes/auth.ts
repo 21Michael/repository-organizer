@@ -5,6 +5,9 @@ import createRouter, { Request, Response } from "express";
 import passport from "../middlewares/passport";
 import sanitize from "../middlewares/sanitize";
 import db from "../services/index";
+import jwt from 'jsonwebtoken';
+import fs from 'fs';
+import authentication from '../middlewares/authentication';
 
 const router = createRouter.Router()
 const UserDB = db.User;
@@ -17,18 +20,22 @@ const signByGitHub = (req: Request, res: Response) => {
     if (!user) {
       return res.status(401).send(info.message);
     }
-    req.logIn(user, function (error: Error) {
+    req.logIn(user, { session: false }, function (error: Error) {
       if (error) {
         return res.status(500).send(error.message);
       }
-      return res.redirect(`${process.env.LOCAL_HOST}`);
+      const privateKey = fs.readFileSync('./config/keys/private.key', 'utf8');
+      const payload = JSON.stringify(user);
+      const token = jwt.sign(payload, privateKey, { algorithm: 'RS256' }, { expiresIn: '1h' });
+
+      return res.cookie('token', token, { httpOnly: true }).redirect(`${process.env.LOCAL_HOST}`);
     });
   })(req, res);
 }
 
-const signOut = async (req: Request, res: Response) => {
+const signOut = (req: Request, res: Response) => {
   try {
-    await req.logout();
+    res.clearCookie('token');
     res.send("Current user was logged out");
   } catch (err) {
     res.status(400).send(err.message);
@@ -68,11 +75,15 @@ const signIn = (req: Request, res: Response) => {
     if (!user) {
       return res.status(401).send(info.message);
     }
-    req.logIn(user, function (err) {
+    req.logIn(user, { session: false }, function (err) {
       if (err) {
         return res.status(500).send(error.message);
       }
-      return res.send("User signed in!");
+      const privateKey = fs.readFileSync('./config/keys/private.key', 'utf8');
+      const payload = JSON.stringify(user);
+      const token = jwt.sign(payload, privateKey, { algorithm: 'RS256' }, { expiresIn: '1h' });
+
+      return res.cookie('token', token, { httpOnly: true }).send("User signed in!");
     });
   })(req, res)
 }
@@ -80,7 +91,7 @@ const signIn = (req: Request, res: Response) => {
 router.get("/github", passport.authenticate("github", { scope: ["user:email"] }));
 router.get("/github/callback", signByGitHub);
 router.get("/sign-out", signOut);
-router.get("/current-user", currentUser);
+router.get("/current-user", authentication, currentUser);
 router.post("/sign-up", sanitize, signUp);
 router.post("/sign-in", signIn);
 

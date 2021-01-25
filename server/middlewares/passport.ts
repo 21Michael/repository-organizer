@@ -8,23 +8,6 @@ import db from "../services/index";
 
 const User = db.User;
 
-//crypt response user [id] data for authentication in middleware
-passport.serializeUser((user: { id: string }, done) => {
-  done(null, user.id);
-});
-
-//decrypt request serialized user by id
-passport.deserializeUser(async (id: string, done) => {
-  try {
-    const user: UserModelMongo | UserModelPostgres = await User.findOne({ id });
-    if (user) {
-      return done(null, user);
-    }
-  } catch (err) {
-    return done(err, false);
-  }
-});
-
 passport.use(
   new LocalStrategy.Strategy(
     { usernameField: "email" },
