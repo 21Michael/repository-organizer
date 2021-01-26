@@ -28,15 +28,14 @@ const signByGitHub = (req: Request, res: Response) => {
       const payload = JSON.stringify(user);
       const token = jwt.sign(payload, privateKey, { algorithm: 'RS256' }, { expiresIn: '1h' });
 
-      return res.cookie('token', token, { httpOnly: true }).redirect(`${process.env.LOCAL_HOST}`);
+      return res.cookie('token', token, { httpOnly: true, secure: true }).redirect(`${process.env.LOCAL_HOST}`);
     });
   })(req, res);
 }
 
 const signOut = (req: Request, res: Response) => {
   try {
-    res.clearCookie('token');
-    res.send("Current user was logged out");
+    res.clearCookie('token').send("Current user was logged out");
   } catch (err) {
     res.status(400).send(err.message);
   }
@@ -83,7 +82,7 @@ const signIn = (req: Request, res: Response) => {
       const payload = JSON.stringify(user);
       const token = jwt.sign(payload, privateKey, { algorithm: 'RS256' }, { expiresIn: '1h' });
 
-      return res.cookie('token', token, { httpOnly: true }).send("User signed in!");
+      return res.cookie('token', token, { httpOnly: true, secure: true }).send("User signed in!");
     });
   })(req, res)
 }

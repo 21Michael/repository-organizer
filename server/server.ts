@@ -1,6 +1,9 @@
 import { CookieOptions } from './types/server';
 import express, { Request, Response, Express } from "express";
 import path from 'path'
+import https from 'https';
+import fs from 'fs';
+import helmet from 'helmet';
 import cors from "cors";
 import cookieSession from "cookie-session";
 import passport from "passport";
@@ -11,6 +14,11 @@ import routes from './routes/index'
 
 const app: Express = express();
 const port: string | number = process.env.PORT || 3000;
+
+const httpsOptions = {
+  key: fs.readFileSync("./config/www/keys/key.pem"),
+  cert: fs.readFileSync("./config/www/keys/cert.pem")
+};
 
 const cookieOptions: CookieOptions = {
   maxAge: 30 * 24 * 60 * 60 * 1000,
@@ -23,6 +31,7 @@ const cookieOptions: CookieOptions = {
 
 app.use(morgan("combined", morganOption));
 app.use(cors());
+app.use(helmet());
 app.use(express.json());
 app.use(cookieSession(cookieOptions));
 app.use(passport.initialize());
@@ -37,7 +46,7 @@ try {
       res.sendFile(path.resolve(__dirname, "/index.html"));
     });
   }
-  app.listen(port, () => {
+  https.createServer(httpsOptions, app).listen(port, () => {
     console.log("Server works on port: " + port);
   });
 } catch (error) {
