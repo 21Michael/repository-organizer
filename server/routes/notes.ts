@@ -5,6 +5,7 @@ import authentication from "../middlewares/authentication";
 import sanitize from "../middlewares/sanitize";
 import db from "../services/index";
 import { RequestInterface } from '../types/routes/notes'
+import { checkCsrfMiddleware } from '../middlewares/csrf';
 
 const router = createRouter.Router();
 const Note = db.Note;
@@ -57,9 +58,9 @@ const editNote = async (req: RequestInterface, res: Response) => {
   }
 }
 
-router.get("/", authentication, getAllNotes);
-router.post("/", authentication, sanitize, addNote);
-router.delete("/:id", authentication, sanitize, deleteNote);
-router.put("/:id", authentication, sanitize, editNote);
+router.get("/", checkCsrfMiddleware, authentication, getAllNotes);
+router.post("/", checkCsrfMiddleware, authentication, sanitize, addNote);
+router.delete("/:id", checkCsrfMiddleware, authentication, sanitize, deleteNote);
+router.put("/:id", checkCsrfMiddleware, authentication, sanitize, editNote);
 
 export default router;

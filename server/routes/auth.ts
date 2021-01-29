@@ -8,6 +8,7 @@ import db from "../services/index";
 import jwt from 'jsonwebtoken';
 import fs from 'fs';
 import authentication from '../middlewares/authentication';
+import { checkCsrfMiddleware } from '../middlewares/csrf';
 
 const router = createRouter.Router()
 const UserDB = db.User;
@@ -63,7 +64,7 @@ const signUp = async (req: Request, res: Response) => {
   }
 }
 
-const signIn = (req: Request, res: Response) => {
+const signIn = (req: any, res: Response) => {
   passport.authenticate("local", function (error: DbError, user: UserModelMongo | UserModelPostgres, info: { message: string }) {
     if (error) {
       if (error.name === 'MongoError' && error.code === 11000) {
@@ -81,7 +82,6 @@ const signIn = (req: Request, res: Response) => {
       const privateKey = fs.readFileSync('./config/keys/private.key', 'utf8');
       const payload = JSON.stringify(user);
       const token = jwt.sign(payload, privateKey, { algorithm: 'RS256' }, { expiresIn: '1h' });
-
       return res.cookie('token', token, { httpOnly: true, secure: true }).send("User signed in!");
     });
   })(req, res)
@@ -90,7 +90,7 @@ const signIn = (req: Request, res: Response) => {
 router.get("/github", passport.authenticate("github", { scope: ["user:email"] }));
 router.get("/github/callback", signByGitHub);
 router.get("/sign-out", signOut);
-router.get("/current-user", authentication, currentUser);
+router.get("/current-user", checkCsrfMiddleware, authentication, currentUser);
 router.post("/sign-up", sanitize, signUp);
 router.post("/sign-in", signIn);
 

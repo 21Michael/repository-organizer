@@ -11,6 +11,8 @@ import 'dotenv/config';
 import logger, { morganOption } from "./config/winston";
 import morgan from "morgan";
 import routes from './routes/index'
+import cookieParser from 'cookie-parser';
+import { createCsrfMiddleware } from './middlewares/csrf'
 
 const app: Express = express();
 const port: string | number = process.env.PORT || 3000;
@@ -30,16 +32,23 @@ const cookieOptions: CookieOptions = {
 }
 
 app.use(morgan("combined", morganOption));
-app.use(cors());
+app.use(
+  cors({
+    origin: true,
+    credentials: true,
+  })
+);
 app.use(helmet());
 app.use(express.json());
+app.use(cookieParser())
 app.use(cookieSession(cookieOptions));
 app.use(passport.initialize());
+app.use('*', createCsrfMiddleware);
+app.use('/', routes);
 
 const mode: string = process.env.NODE_ENV;
 
 try {
-  app.use('/', routes);
   if (mode === "production ") {
     app.use(express.static("../client/build"));
     app.get("*", (req: Request, res: Response) => {

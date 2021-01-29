@@ -4,6 +4,7 @@ import createRouter, { Request, Response } from "express"
 import sanitize from "../middlewares/sanitize";
 import authentication from '../middlewares/authentication'
 import db from "../services/index";
+import { checkCsrfMiddleware } from '../middlewares/csrf';
 
 const router = createRouter.Router();
 const Repository = db.Repository;
@@ -65,8 +66,8 @@ const editRepository = async (req: Request, res: Response) => {
 };
 
 router.get("/", getAllRepositories);
-router.post("/", authentication, sanitize, addRepository);
-router.delete("/:id", authentication, deleteRepository);
-router.put("/:id", authentication, sanitize, editRepository);
+router.post("/", checkCsrfMiddleware, authentication, sanitize, addRepository);
+router.delete("/:id", checkCsrfMiddleware, authentication, deleteRepository);
+router.put("/:id", checkCsrfMiddleware, authentication, sanitize, editRepository);
 
 export default router;
