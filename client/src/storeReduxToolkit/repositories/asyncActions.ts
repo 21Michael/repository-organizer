@@ -9,7 +9,9 @@ import {
   AddRepositoryProps, AddRepositoryResponse, RepositoryGitHub, RepositoryLocal, EditRepositoryProps
 } from "../../types/storeReduxToolkit/repositories/asyncActions";
 import { User } from '../../types/storeReduxToolkit/auth/slices'
+import setCSRFHeader from '../../config/setCSRFHeader'
 
+const REQUEST_OPTIONS = setCSRFHeader();
 const CLIENT_ID = process.env.GITHUB_CLIENT_ID;
 const CLIENT_SECRET = process.env.GITHUB_CLIENT_SECRET_KEY;
 
@@ -17,7 +19,7 @@ export const addRepository = createAsyncThunk(
   "repositories/addRepository",
   async (repository: AddRepositoryProps, thunkApi: ThunkApi) => {
     try {
-      const response: AddRepositoryResponse = await axios.post("/repositories", repository);
+      const response: AddRepositoryResponse = await axios.post("/repositories", repository, REQUEST_OPTIONS);
       if (response) {
         repository._id = response.headers.location.match(
           /(?<=\/\w+\/).+/g
@@ -36,7 +38,7 @@ export const deleteRepository = createAsyncThunk(
   "repositories/deleteRepository",
   async (id: string, thunkApi: ThunkApi) => {
     try {
-      const response: Response = await axios.delete(`/repositories/${id}`);
+      const response: Response = await axios.delete(`/repositories/${id}`, REQUEST_OPTIONS);
       if (response) {
         return id;
       }
@@ -50,7 +52,7 @@ export const editRepository = createAsyncThunk(
   "repositories/editRepository",
   async ({ id, repo }: EditRepositoryProps, thunkApi: ThunkApi) => {
     try {
-      const response: Response = await axios.put(`/repositories/${id}`, repo);
+      const response: Response = await axios.put(`/repositories/${id}`, repo, REQUEST_OPTIONS);
 
       if (response) {
         thunkApi.dispatch(actions.editRepositorySuccess({ id, repository: repo }));
@@ -91,7 +93,7 @@ export const fetchRepositories = createAsyncThunk(
   "repositories/fetchRepositories",
   async (_arg, thunkApi: ThunkApi) => {
     try {
-      const response = await axios.get("/repositories");
+      const response = await axios.get("/repositories", REQUEST_OPTIONS);
       if (response) {
         const repositories = response.data.map((el: RepositoryLocal) => {
           return {

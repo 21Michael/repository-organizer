@@ -8,12 +8,15 @@ import { actions as actionsNotes } from "../notes/slices";
 import {
   UserProps, CurrentUserResponse, CustomResponse
 } from "../../types/storeReduxToolkit/auth/asyncActions";
+import setCSRFHeader from '../../config/setCSRFHeader'
+
+const REQUEST_OPTIONS = setCSRFHeader();
 
 export const signUpUser = createAsyncThunk(
   "auth/signUpUser",
   async (user: UserProps, thunkApi: ThunkApi) => {
     try {
-      const response: CustomResponse = await axios.post("/auth/sign-up", user);
+      const response: CustomResponse = await axios.post("/auth/sign-up", user, REQUEST_OPTIONS);
       if (response) {
         thunkApi.dispatch(actions.signUpUserSuccess());
         thunkApi.dispatch(actions.showNotification({ message: response?.data, type: 'success' }));
@@ -36,7 +39,7 @@ export const signInUser = createAsyncThunk(
   "auth/signInUser",
   async (user: UserProps, thunkApi: ThunkApi) => {
     try {
-      const response: Response = await axios.post("/auth/sign-in", user);
+      const response: Response = await axios.post("/auth/sign-in", user, REQUEST_OPTIONS);
       if (response) {
         thunkApi.dispatch(actions.fetchCurrentUser());
       }
@@ -55,7 +58,7 @@ export const fetchCurrentUser = createAsyncThunk(
   "auth/fetchCurrentUser",
   async (_arg, thunkApi: ThunkApi) => {
     try {
-      const response: { data: CurrentUserResponse } = await axios.get("/auth/current-user");
+      const response: { data: CurrentUserResponse } = await axios.get("/auth/current-user", REQUEST_OPTIONS);
       const userResponse: CurrentUserResponse = response.data;
       if (response) {
         const user: User = {
@@ -85,7 +88,7 @@ export const signOutUser = createAsyncThunk(
   "auth/signOutUser",
   async (_arg, thunkApi: ThunkApi) => {
     try {
-      const response: Response = await axios.get("/auth/sign-out");
+      const response: Response = await axios.get("/auth/sign-out", REQUEST_OPTIONS);
       if (response) {
         thunkApi.dispatch(actions.signOutUserSuccess());
         thunkApi.dispatch(actions.fetchCurrentUser());

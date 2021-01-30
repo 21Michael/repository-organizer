@@ -7,12 +7,15 @@ import { actions } from "./slices";
 import {
   AddNoteProps, AddNoteResponse, NotesResponse, EditNoteProps
 } from "../../types/storeReduxToolkit/notes/asyncActions";
+import setCSRFHeader from '../../config/setCSRFHeader'
+
+const REQUEST_OPTIONS = setCSRFHeader();
 
 export const addNote = createAsyncThunk(
   "notes/addNote",
   async (note: AddNoteProps, thunkApi: ThunkApi) => {
     try {
-      const response: AddNoteResponse = await axios.post("/notes", note);
+      const response: AddNoteResponse = await axios.post("/notes", note, REQUEST_OPTIONS);
       if (response) {
         const newNoteId: string = response.headers.location.match(/(?<=\/\w+\/).+/g)[0];
         thunkApi.dispatch(
@@ -29,7 +32,7 @@ export const deleteNote = createAsyncThunk(
   "notes/deleteNote",
   async (id: string, thunkApi: ThunkApi) => {
     try {
-      const response: Response = await axios.delete(`/notes/${id}`);
+      const response: Response = await axios.delete(`/notes/${id}`, REQUEST_OPTIONS);
       if (response) {
         return id;
       }
@@ -43,7 +46,7 @@ export const editNote = createAsyncThunk(
   "notes/editNote",
   async ({ id, text }: EditNoteProps, thunkApi: ThunkApi) => {
     try {
-      const response: Response = await axios.put(`/notes/${id}`, { text });
+      const response: Response = await axios.put(`/notes/${id}`, { text }, REQUEST_OPTIONS);
       if (response) {
         thunkApi.dispatch(actions.editNoteSuccess({ id, text }));
       }
@@ -58,7 +61,7 @@ export const fetchNotes = createAsyncThunk(
   "notes/fetchNotes",
   async (_arg, thunkApi: ThunkApi) => {
     try {
-      const response: { data: NotesResponse } = await axios.get("/notes");
+      const response: { data: NotesResponse } = await axios.get("/notes", REQUEST_OPTIONS);
       if (response) {
         const notes: Note[] = response.data.map((el: NotesResponse) => {
           return {

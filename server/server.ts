@@ -32,12 +32,7 @@ const cookieOptions: CookieOptions = {
 }
 
 app.use(morgan("combined", morganOption));
-app.use(
-  cors({
-    origin: true,
-    credentials: true,
-  })
-);
+app.use(cors());
 app.use(helmet());
 app.use(express.json());
 app.use(cookieParser())
