@@ -10,7 +10,6 @@ const userSchema: Schema = new mongoose.Schema(
     email: {
       type: String,
       lowercase: [true, 'Invalid error: email must be lowercase'],
-      unique: true,
       validate: {
         validator: (val) => validator.isEmail(val),
         message: 'Invalid error: invalid email!'
@@ -30,13 +29,12 @@ userSchema.methods.validatePassword = (val) => /^(?=.*[A-Z].*[A-Z])(?=.*[!@#$&*]
 
 userSchema.pre("save", async function (next) {
   const User: Schema = this;
-  if (User.password) {
-    if (!userSchema.methods.validatePassword(User.password)) {
-      return next(Error('Invalid error: invalid password!'));
-    }
-    User.password = await bcrypt.hash(User.password, 12);
-    return next()
+  if (!User.password) return next()
+  if (!userSchema.methods.validatePassword(User.password)) {
+    return next(Error('Invalid error: invalid password!'));
   }
+  User.password = await bcrypt.hash(User.password, 12);
+  return next()
 });
 
 export default mongoose.model<UserModel>("User", userSchema);

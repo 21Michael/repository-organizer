@@ -48,7 +48,7 @@ const Repositories: React.FC = () => {
   return (
     <main className={classes.main}>
       <div className={classes.main__wrapper}>
-        {signedIn && user?.signedBy === "local" ? (
+        {signedIn && user?.signedBy !== "github" ? (
           <ButtonLink
             to={table.buttonLink.to}
             label={table.buttonLink.label}

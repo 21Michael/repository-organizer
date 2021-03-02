@@ -9,21 +9,8 @@ import db from "../services/index";
 const router = createRouter.Router()
 const UserDB = db.User;
 
-const signByGitHub = (req: Request, res: Response) => {
-  passport.authenticate("github", function (error: Error, user: UserModelMongo | UserModelPostgres, info: { message: string }) {
-    if (error) {
-      return res.status(401).send(error.message);
-    }
-    if (!user) {
-      return res.status(401).send(info.message);
-    }
-    req.logIn(user, function (error: Error) {
-      if (error) {
-        return res.status(500).send(error.message);
-      }
-      return res.redirect(`${process.env.LOCAL_HOST}`);
-    });
-  })(req, res);
+const signedSuccess = (req: Request, res: Response) => {
+  return res.redirect(`${process.env.LOCAL_HOST}`);
 }
 
 const signOut = async (req: Request, res: Response) => {
@@ -44,6 +31,10 @@ const currentUser = (req: Request, res: Response) => {
 const signUp = async (req: Request, res: Response) => {
   try {
     const { name, email, password } = req.body;
+
+    const user: UserModelMongo | UserModelPostgres = await UserDB.findOneByEmail({ email });
+    if (user) throw Error("User with same email already exists!")
+
     const signedBy = "local";
     const newUser: UserModelMongo | UserModelPostgres = await UserDB.createUser({ name, email, signedBy, password });
     const newUserId: string = newUser.id;
@@ -76,9 +67,10 @@ const signIn = (req: Request, res: Response) => {
     });
   })(req, res)
 }
-
+router.get("/google", passport.authenticate("google", { scope: ['profile', 'email'] }));
+router.get("/google/callback", passport.authenticate("google"), signedSuccess);
 router.get("/github", passport.authenticate("github", { scope: ["user:email"] }));
-router.get("/github/callback", signByGitHub);
+router.get("/github/callback", passport.authenticate("github"), signedSuccess);
 router.get("/sign-out", signOut);
 router.get("/current-user", currentUser);
 router.post("/sign-up", sanitize, signUp);

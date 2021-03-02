@@ -14,7 +14,7 @@ const UserService = class {
   findOneByGitHubId({ id }) {
     return this.userModel.findOne({ github_id: id });
   }
-  async createUser({ name, email, signedBy, password }) {
+  createUser({ name, email, signedBy, password }) {
     return new this.userModel({
       user_name: name,
       signed_by: signedBy,
@@ -29,6 +29,14 @@ const UserService = class {
       github_id: githubId,
       avatar_url: avatarURL,
       profile_url: profileURL,
+    }).save();
+  }
+  createUserGoogle({ name, signedBy, avatarURL, email }) {
+    return new this.userModel({
+      user_name: name,
+      signed_by: signedBy,
+      avatar_url: avatarURL,
+      email: email
     }).save();
   }
   deleteOne({ id }) {

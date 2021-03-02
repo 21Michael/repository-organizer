@@ -13,7 +13,7 @@ const TrHeader: React.FC<Props> = (props) => {
         </th>
       ))}
       {props.signedIn ? (
-        props.page !== "repository" || signedBy === "local" ? (
+        props.page !== "repository" || signedBy !== "github" ? (
           <th className={`${classes.th} ${classes.th_actions}`}>Actions</th>
         ) : null
       ) : null}

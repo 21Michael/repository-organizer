@@ -58,12 +58,16 @@ export interface InitialState {
       to: string;
       classModifier: string;
     };
-    github: {
-      type: string;
-      name: string;
-      icon: IconName;
-      to: string;
-    };
+    github: NetworkAuth;
+    google: NetworkAuth;
   };
+}
+
+interface NetworkAuth {
+  type: string;
+  name: string;
+  icon: IconName;
+  to: string;
+  bgColor?: string;
 }
 

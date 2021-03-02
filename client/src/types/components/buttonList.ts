@@ -1,6 +1,7 @@
 import { IconName } from "@fortawesome/fontawesome-svg-core";
 
 interface ButtonAttributes {
+  bgColor?: string;
   label: string;
   type: string;
   name: string;

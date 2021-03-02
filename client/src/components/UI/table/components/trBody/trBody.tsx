@@ -25,7 +25,7 @@ const TrBody: React.FC<Props> = (props) => {
         ) : null
       )}
       {props.signedIn ? (
-        props.page !== "repository" || signedBy === "local" ? (
+        props.page !== "repository" || signedBy !== "github" ? (
           <TdAction
             id={props.trData._id}
             state={{ ...props.trData }}

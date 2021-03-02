@@ -89,7 +89,14 @@ const SignIn: React.FC<Props> = (props) => {
         name: "github",
         icon: "github",
         to: `${process.env.REACT_APP_SERVER_URL}/auth/github`,
-      },
+      }, 
+      google: {
+        type: "network",
+        name: "google",
+        icon: "google",
+        to: `${process.env.REACT_APP_SERVER_URL}/auth/google`,
+        bgColor: '#8F6B28'
+      }
     },
   };
   const [form, setForm] = useState<InitialState>(initialState);

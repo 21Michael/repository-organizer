@@ -14,7 +14,7 @@ const ButtonList: React.FC<Props> = (props) => {
           <Button
             type="submit"
             name="submit"
-            label={props.buttonList[key].label}
+            label={props.buttonList[key].label} 
             key={i}
           />
         )
@@ -33,6 +33,7 @@ const ButtonList: React.FC<Props> = (props) => {
             name={props.buttonList[key].name}
             icon={props.buttonList[key].icon}
             to={props.buttonList[key].to}
+            bgColor={props.buttonList[key].bgColor}
           />
         )
       : null

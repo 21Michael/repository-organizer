@@ -3,6 +3,7 @@ import { UserModel as UserModelPostgres } from './../types/databases/models/post
 import passport from "passport";
 import LocalStrategy from "passport-local";
 import GitHubStrategy from "passport-github";
+import GoogleStrategy from 'passport-google-oauth20';
 import bcrypt from "bcryptjs";
 import db from "../services/index";
 
@@ -57,25 +58,45 @@ passport.use(
     async (accessToken, refreshToken, profile, done) => {
       try {
         const user: UserModelMongo | UserModelPostgres = await User.findOneByGitHubId({ id: profile.id });
-        if (user) {
-          return done(null, user);
-        }
-        if (!user) {
-          const { login, id, avatar_url, html_url } = profile._json;
-          const newUser: UserModelMongo | UserModelPostgres = await User.createUserGitHub({
-            name: login,
-            signedBy: 'github',
-            githubId: id,
-            avatarURL: avatar_url,
-            profileURL: html_url
-          });
-          return done(null, newUser);
-        }
+        if (user) return done(null, user);
+        const { login, id, avatar_url, html_url } = profile._json;
+        const newUser: UserModelMongo | UserModelPostgres = await User.createUserGitHub({
+          name: login,
+          signedBy: 'github',
+          githubId: id,
+          avatarURL: avatar_url,
+          profileURL: html_url
+        });
+        return done(null, newUser);
       } catch (err) {
         return done(err, false);
       }
     }
   )
 );
+
+passport.use(new GoogleStrategy({
+  clientID: process.env.GOOGLE_CLIENT_ID,
+  clientSecret: process.env.GOOGLE_CLIENT_SECRET_KEY,
+  callbackURL: "/auth/google/callback",
+  proxy: true,
+},
+  async (accessToken, refreshToken, profile, done) => {
+    try {
+      const { name, email, picture } = profile._json;
+      const user: UserModelMongo | UserModelPostgres = await User.findOneByEmail({ email });
+      if (user) return done(null, user);
+      const newUser: UserModelMongo | UserModelPostgres = await User.createUserGoogle({
+        name,
+        signedBy: 'google',
+        email,
+        avatarURL: picture
+      });
+      return done(null, newUser);
+    } catch (err) {
+      return done(err, false);
+    }
+  }
+));
 
 export default passport;
