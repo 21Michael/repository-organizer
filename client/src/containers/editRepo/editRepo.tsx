@@ -1,11 +1,8 @@
-import React, { useState, useEffect, useCallback } from "react";
-import { shallowEqual, useSelector, useDispatch } from "react-redux";
+import React, { useState } from "react";
 import Time from "../../utiles/time";
 import classes from "./editRepo.module.scss";
-import { actions } from "../../storeReduxToolkit/repositories/slices";
 import { withRouter } from "react-router";
-import { RootReducer } from "../../types/storeReduxToolkit/rootReducer";
-import { AppDispatch } from "../../storeReduxToolkit/configStore";
+import { useMutation } from '@apollo/client';
 import Form from "../../components/UI/form/form";
 import {
   Props,
@@ -13,25 +10,15 @@ import {
   OnChangeHandler,
   OnSubmitHandler,
 } from "../../types/containers/editRepo";
+import {UPDATE_REPOSITORY_MUTATION} from './query';
 
-const EditRepo: React.FC<Props> = (props) => {
-  const dispatch: AppDispatch = useDispatch();
-  const history = props.history;
+const EditRepo: React.FC<Props> = ({ history, location}) => {
+  const editingRepository = location.state?.data;
 
-  const repositoryEditSuccess: boolean = useSelector(
-    (state: RootReducer) => state.repositories.repositoryEditSuccess,
-    shallowEqual
-  );
-
-  const repositoryEditSuccessHandler: () => void = useCallback(() => {
-    history.push("/repository");
-    dispatch(actions.editRepositoryFailed());
-  }, [dispatch, history]);
-
-  useEffect(() => {
-    if (repositoryEditSuccess) {
-      repositoryEditSuccessHandler();
-    }
+  const [updateRepository] = useMutation(UPDATE_REPOSITORY_MUTATION, {
+    onCompleted: () => {
+      history.push("/");
+    },
   });
 
   const initialState: InitialState = {
@@ -40,7 +27,7 @@ const EditRepo: React.FC<Props> = (props) => {
       name: {
         element: "input",
         name: "name",
-        value: props.location.state?.data.name,
+        value: editingRepository.name,
         type: "text",
         label: "Name",
         rules: {
@@ -50,7 +37,7 @@ const EditRepo: React.FC<Props> = (props) => {
       description: {
         element: "textarea",
         name: "description",
-        value: props.location.state?.data.description,
+        value: editingRepository.description,
         label: "Description",
         rules: {
           required: { value: true, message: "required" },
@@ -59,7 +46,7 @@ const EditRepo: React.FC<Props> = (props) => {
       stars: {
         element: "input",
         name: "stars",
-        value: props.location.state?.data.stars,
+        value: editingRepository.stars,
         type: "number",
         label: "Stars",
         rules: {
@@ -67,27 +54,27 @@ const EditRepo: React.FC<Props> = (props) => {
           min: { value: 0, message: "min value: 0" },
         },
       },
-      creatorName: {
+      creator_name: {
         element: "input",
-        name: "creatorName",
-        value: props.location.state?.data.creatorName,
+        name: "creator_name",
+        value: editingRepository.creator_name,
         type: "text",
         label: "Creator Name",
         rules: {
           required: { value: true, message: "required" },
         },
       },
-      createdAt: {
+      created_at: {
         element: "input",
-        name: "createdAt",
-        value: props.location.state?.data.createdAt,
+        name: "created_at",
+        value: editingRepository.created_at,
         type: "date",
         label: "Created At",
         rules: {
           required: { value: true, message: "required" },
           validate: {
             notInFuture: (date: Date) =>
-              !Time(date).isFuture(props.location.state?.data.createdAt) ||
+              !Time(date).isFuture(editingRepository.create_at) ||
               "the repository cannot be created in the future",
           },
         },
@@ -107,12 +94,12 @@ const EditRepo: React.FC<Props> = (props) => {
     setForm((state: InitialState) => {
       state.inputList[input].value = value;
       return state;
-    });
+    })
   };
 
-  const onSubmitHandler: OnSubmitHandler = async (repo) => {
-    const id = props.location.state?.data._id;
-    await dispatch(actions.editRepository({ id, repo }));
+  const onSubmitHandler: OnSubmitHandler = async (data) => {
+    const newRepository = {...data, _id: editingRepository._id};
+    await updateRepository({ variables: {data: newRepository} })
   };
 
   return (

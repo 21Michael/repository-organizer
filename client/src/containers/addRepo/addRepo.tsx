@@ -1,11 +1,7 @@
-import React, { useState, useEffect, useCallback } from "react";
-import { shallowEqual, useSelector, useDispatch } from "react-redux";
+import React, { useState } from "react";
 import classes from "./addRepo.module.scss";
 import Time from "../../utiles/time";
-import { actions } from "../../storeReduxToolkit/repositories/slices";
 import { withRouter } from "react-router";
-import { RootReducer } from "../../types/storeReduxToolkit/rootReducer";
-import { AppDispatch } from "../../storeReduxToolkit/configStore";
 import Form from "../../components/UI/form/form";
 import {
   Props,
@@ -13,24 +9,26 @@ import {
   OnChangeHandler,
   OnSubmitHandler,
 } from "../../types/containers/addRepo";
+import { useMutation } from "@apollo/client";
+import { ADD_REPOSITORY_MUTATION} from './query';
+import { REPOSITORIES_QUERY } from "../repositories/query";
 
-const AddRepo: React.FC<Props> = (props) => {
-  const dispatch: AppDispatch = useDispatch();
-  const history = props.history;
+const AddRepo: React.FC<Props> = ({ history }) => {
 
-  const repositoryAddSuccess: boolean = useSelector(
-    (state: RootReducer) => state.repositories.repositoryAddSuccess,
-    shallowEqual
-  );
+  const [addRepository] = useMutation(ADD_REPOSITORY_MUTATION, {
+    onCompleted: () => {
+      history.push("/");
+    },
+    update: (cache, {data}) => {
+      const { addRepository: newRepository } = data;
+      const { repositories }:any = cache.readQuery({query:REPOSITORIES_QUERY});
 
-  const repositoryAddSuccessHandler: () => void = useCallback(() => {
-    history.push("/repository");
-    dispatch(actions.addRepositoryFailed());
-  }, [dispatch, history]);
+      if(!newRepository && !repositories) return null;
 
-  useEffect(() => {
-    if (repositoryAddSuccess) {
-      repositoryAddSuccessHandler();
+      cache.writeQuery({
+        query: REPOSITORIES_QUERY,
+        data: { repositories: [...repositories, newRepository] },
+      });
     }
   });
 
@@ -67,9 +65,9 @@ const AddRepo: React.FC<Props> = (props) => {
           min: { value: 0, message: "min value: 0" },
         },
       },
-      creatorName: {
+      creator_name: {
         element: "input",
-        name: "creatorName",
+        name: "creator_name",
         value: "",
         type: "text",
         label: "Creator Name",
@@ -77,9 +75,9 @@ const AddRepo: React.FC<Props> = (props) => {
           required: { value: true, message: "required" },
         },
       },
-      createdAt: {
+      created_at: {
         element: "input",
-        name: "createdAt",
+        name: "created_at",
         value: Time().toDateInputValue(),
         type: "date",
         label: "Created At",
@@ -110,9 +108,7 @@ const AddRepo: React.FC<Props> = (props) => {
     });
   };
 
-  const onSubmitHandler: OnSubmitHandler = async (repo) => {
-    await dispatch(actions.addRepository(repo));
-  };
+  const onSubmitHandler: OnSubmitHandler = (data) => addRepository({variables:{ data }});
 
   return (
     <div className={classes.wrapper}>

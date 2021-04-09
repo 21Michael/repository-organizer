@@ -1,4 +1,4 @@
-import { mockNote } from './../../__mocks__/services';
+import { mockNote } from '../../__mocks__/services';
 import mockModels from '../../__mocks__/models/modelsMongo'
 import Note from '../../../services/mongo/note.service';
 
@@ -20,14 +20,14 @@ export default describe("Service note tests:", () => {
   });
 
   test("Update note:", async (done) => {
-    await noteService.updateOne({ text: 'testText', userId: 'testUserId', noteId: 'testNoteId' });
+    await noteService.updateOne({ text: 'testText', user_id: 'testUserId', note_id: 'testNoteId' });
     expect(mockNoteModel.findOne).toHaveBeenCalled();
     expect(spyOn(mockNoteModel.prototype, 'save')).toHaveBeenCalled;
     done();
   });
 
   test("Delete note:", async (done) => {
-    await noteService.deleteOne({ userId: 'testUserId', noteId: 'testNoteId' });
+    await noteService.deleteOne({ user_id: 'testUserId', note_id: 'testNoteId' });
     expect(mockNoteModel.deleteOne).toHaveBeenCalled();
     done();
   });

@@ -1,4 +1,4 @@
-import { mockRepo } from './../../__mocks__/services';
+import { mockRepo } from '../../__mocks__/services';
 import mockModels from '../../__mocks__/models/modelsMongo'
 import Repository from '../../../services/mongo/repository.service';
 
@@ -20,7 +20,7 @@ export default describe("Service repository tests:", () => {
     });
 
     test("Update repo:", async (done) => {
-        await repositoryService.updateOne({ id: 'testId', ...mockRepo });
+        await repositoryService.updateOne({ _id: 'testId', ...mockRepo });
         expect(mockRepositoryModel.findOne).toHaveBeenCalled();
         expect(spyOn(mockRepositoryModel.prototype, 'save')).toHaveBeenCalled;
         done();

@@ -1,12 +1,7 @@
-import React, { useState, useEffect, useCallback } from "react";
-import { shallowEqual, useSelector, useDispatch } from "react-redux";
+import React, { useState } from "react";
 import { withRouter } from "react-router";
 import classes from "./editNote.module.scss";
-import Immutable from "seamless-immutable";
-import { AppDispatch } from "../../storeReduxToolkit/configStore";
-import { actions } from "../../storeReduxToolkit/notes/slices";
-import { Repository } from "../../types/storeReduxToolkit/repositories/slices";
-import { RootReducer } from "../../types/storeReduxToolkit/rootReducer";
+import { Repository } from "../../types/entities/repository";
 import Form from "../../components/UI/form/form";
 import {
   Props,
@@ -16,43 +11,29 @@ import {
   OnChangeHandler,
   OnSubmitHandler,
 } from "../../types/containers/editNote";
+import { useMutation, useQuery } from "@apollo/client";
+import { UPDATE_NOTE_MUTATION } from './query';
+import { REPOSITORIES_QUERY } from "../repositories/query";
+import Notification from "../../components/UI/notification/notification";
+import {toRepositoryInput} from "./utiles";
 
-const EditNote: React.FC<Props> = (props) => {
-  const dispatch: AppDispatch = useDispatch();
-  const repositoryId: string = props.location.state?.data.repositoryId;
-  const history = props.history;
-  const repositories: Repository[] = useSelector(
-    (state: RootReducer) =>
-      Immutable.asMutable(state.repositories.repositories),
-    shallowEqual
-  );
+const EditNote: React.FC<Props> = ({ history, location}) => {
+  const repositoryId: string = location.state?.data.repository_id;
 
-  const toRepositoryInput = (el: Repository) => ({
-    value: el._id,
-    label: el.name,
+  const [updateNote] = useMutation(UPDATE_NOTE_MUTATION, {
+    onCompleted: () => {
+      history.push("/note");
+    },
   });
-  const optionsSelectInput: RepositoryInput["options"] = repositories.map(
-    toRepositoryInput
-  );
-  const editingRepository: Input["value"] = repositories
+
+  const { loading, data } = useQuery(REPOSITORIES_QUERY, {
+    notifyOnNetworkStatusChange: true,
+  });
+
+  const optionsSelectInput: RepositoryInput["options"] = data?.repositories.map(toRepositoryInput);
+  const editingRepository: Input["value"] = data?.repositories
     .map(toRepositoryInput)
-    .find((el) => el.value === repositoryId);
-
-  const noteEditSuccess: boolean = useSelector(
-    (state: RootReducer) => state.notes.noteEditSuccess,
-    shallowEqual
-  );
-
-  const noteEditSuccessHandler: () => void = useCallback(() => {
-    history.push("/note");
-    dispatch(actions.editNoteFailed());
-  }, [dispatch, history]);
-
-  useEffect(() => {
-    if (noteEditSuccess) {
-      noteEditSuccessHandler();
-    }
-  }, [noteEditSuccess, noteEditSuccessHandler]);
+    .find((el: Repository) => el.value === repositoryId);
 
   const initialState: InitialState = {
     title: `Edit note`,
@@ -64,7 +45,7 @@ const EditNote: React.FC<Props> = (props) => {
         label: "Repository",
         placeholder: "Dropdown",
         value: editingRepository,
-        disabled: Boolean(props.location.state),
+        disabled: Boolean(location.state),
         rules: {
           required: { value: true, message: "required" },
         },
@@ -72,7 +53,7 @@ const EditNote: React.FC<Props> = (props) => {
       text: {
         element: "textarea",
         name: "text",
-        value: props.location.state?.data.text,
+        value: location.state?.data.text,
         label: "Text",
         rules: {
           required: { value: true, message: "required" },
@@ -97,9 +78,9 @@ const EditNote: React.FC<Props> = (props) => {
   };
 
   const onSubmitHandler: OnSubmitHandler = async (data) => {
-    const id: string = props.location.state?.data._id;
+    const note_id: string = location.state?.data._id;
     const text: string = data.text;
-    await dispatch(actions.editNote({ id, text }));
+    await updateNote({variables: { data: { note_id, text } } });
   };
 
   return (
@@ -109,6 +90,7 @@ const EditNote: React.FC<Props> = (props) => {
         form={form}
         onChangeHandler={onChangeHandler}
       />
+      {loading ? <Notification notification={{ message: "Loading....", type: 'pending' }} /> : null}
     </div>
   );
 };

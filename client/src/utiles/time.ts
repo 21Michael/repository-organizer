@@ -20,7 +20,7 @@ export default function Time(date?: Date) {
             }
             else { return this._now.isBefore(this._userDate); }
         }
-        toDateInputValue(date?: Date) {
+        toDateInputValue(date?: Date | string) {
             return date ? moment(date).format('YYYY-MM-DD') :
                 this._now.format('YYYY-MM-DD');
         }

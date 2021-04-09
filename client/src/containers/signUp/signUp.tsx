@@ -1,44 +1,24 @@
-import React, { useState, useEffect, useCallback } from "react";
-import { shallowEqual, useSelector, useDispatch } from "react-redux";
+import React, { useState } from "react";
 import classes from "./signUp.module.scss";
 import Form from "../../components/UI/form/form";
-import { actions } from "../../storeReduxToolkit/auth/slices";
 import { withRouter } from "react-router";
 import validator from "validator";
 import Notification from "../../components/UI/notification/notification";
-import { RootReducer } from "../../types/storeReduxToolkit/rootReducer";
-import { AppDispatch } from "../../storeReduxToolkit/configStore";
 import {
   Props,
   InitialState,
   OnChangeHandler,
-  OnSubmitHandler,
 } from "../../types/containers/signUp";
-import { Notification as NotificationType } from "../../types/storeReduxToolkit/auth/slices";
+import {useMutation} from "@apollo/client";
+import { SIGN_UP_MUTATION } from "./query";
 
-const SignUp: React.FC<Props> = (props) => {
-  const dispatch: AppDispatch = useDispatch();
-
-  const history = props.history;
-  const notification: NotificationType = useSelector(
-    (state: RootReducer) => state.auth.notification,
-    shallowEqual
-  );
-  const signedUpSuccess: boolean = useSelector(
-    (state: RootReducer) => state.auth.signedUpSuccess,
-    shallowEqual
-  );
-
-  const signedUpSuccessHandler: () => void = useCallback(() => {
-    history.push("/signin");
-    dispatch(actions.signUpUserFailed());
-  }, [dispatch, history]);
-
-  useEffect(() => {
-    if (signedUpSuccess) {
-      signedUpSuccessHandler();
-    }
-  }, [signedUpSuccess, signedUpSuccessHandler]);
+const SignUp: React.FC<Props> = ({ history }) => {
+  const [signUp, { loading, error }] = useMutation(SIGN_UP_MUTATION, {
+    onCompleted: () => {
+      history.push("/signin");
+    },
+    onError: (error) => console.log(error)
+  });
 
   const initialState: InitialState = {
     title: `Create an account`,
@@ -136,14 +116,14 @@ const SignUp: React.FC<Props> = (props) => {
     });
   };
 
-  const onSubmitHandler: OnSubmitHandler = async (data) => {
-    await dispatch(
-      actions.signUpUser({
-        name: data.user,
-        email: data.email,
-        password: data.password,
-      })
-    );
+  const onSubmitHandler: (data: any) => void = async ({ user, email, password }) => {
+    await signUp({
+      variables: {
+        name: user,
+        email,
+        password
+      }
+    })
   };
 
   const samePassword: (password: string) => boolean = (password) => {
@@ -157,7 +137,8 @@ const SignUp: React.FC<Props> = (props) => {
         onSubmit={onSubmitHandler}
         onChangeHandler={onChangeHandler}
       />
-      {notification ? <Notification notification={notification} /> : null}
+      {loading ? <Notification notification={{message: "Loading....", type: 'pending'}} /> : null}
+      {error ? <Notification notification={{message: error.message, type: 'error'}} /> : null}
     </div>
   );
 };

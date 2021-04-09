@@ -1,3 +1,4 @@
+import { formatDate } from './../../utiles/date';
 import { Schema } from 'mongoose';
 
 const NoteService = class {
@@ -5,37 +6,38 @@ const NoteService = class {
   constructor(model) {
     this.noteModel = model;
   }
-  findAll({ id }) {
-    return this.noteModel.find({ user_id: id });
+  async findAll({ id }) {
+    const notes = await this.noteModel.find({ user_id: id });
+    return formatDate(notes, 'YYYY-MM-DD');
   }
-  createNote({ repositoryId, text, createdAt, userId }) {
-    return new this.noteModel({
-      repository_id: repositoryId,
+  async createNote({ repository_id, text, created_at, user_id }) {
+    return await new this.noteModel({
+      repository_id,
       text,
-      created_at: createdAt,
-      user_id: userId,
+      created_at,
+      user_id,
     }).save();
   }
-  deleteOne({ userId, noteId }) {
-    return this.noteModel.deleteOne({
-      user_id: userId,
-      _id: noteId,
+  async deleteOne({ user_id, note_id }) {
+    return await this.noteModel.deleteOne({
+      user_id,
+      _id: note_id,
     });
   }
-  async updateOne({ text, userId, noteId }) {
+  async updateOne({ text, user_id, note_id }) {
     const note: Schema = await this.noteModel.findOne({
-      user_id: userId,
-      _id: noteId,
+      user_id,
+      _id: note_id,
     });
     if (note) {
       note.text = text;
       return note.save();
     }
   }
-  findOne({ userId, noteId }) {
-    return this.noteModel.findOne({
-      user_id: userId,
-      _id: noteId
+  async findOne({ user_id, note_id }) {
+    return await this.noteModel.findOne({
+      user_id,
+      _id: note_id
     })
   }
 };

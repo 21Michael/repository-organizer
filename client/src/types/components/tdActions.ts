@@ -1,5 +1,5 @@
 import { RouteComponentProps } from "react-router";
-import { User } from "../storeReduxToolkit/auth/slices";
+import { User } from "../entities/user";
 
 export interface Props extends RouteComponentProps {
   user?: User;

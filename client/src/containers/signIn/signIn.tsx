@@ -1,41 +1,19 @@
-import React, { useState, useEffect } from "react";
-import { shallowEqual, useSelector, useDispatch } from "react-redux";
+import React, { useState } from "react";
 import classes from "./signIn.module.scss";
 import Form from "../../components/UI/form/form";
 import { withRouter } from "react-router-dom";
 import validator from "validator";
-import { actions } from "../../storeReduxToolkit/auth/slices";
 import Notification from "../../components/UI/notification/notification";
-import { RootReducer } from "../../types/storeReduxToolkit/rootReducer";
-import { AppDispatch } from "../../storeReduxToolkit/configStore";
 import {
   Props,
   InitialState,
   OnChangeHandler,
   OnSubmitHandler,
 } from "../../types/containers/signIn";
-import { Notification as NotificationType } from "../../types/storeReduxToolkit/auth/slices";
+import { useMutation } from "@apollo/client";
+import { AUTH_LOCAL_MUTATION } from "./query";
 
-const SignIn: React.FC<Props> = (props) => {
-  const dispatch: AppDispatch = useDispatch();
-
-  const history = props.history;
-  const notification: NotificationType = useSelector(
-    (state: RootReducer) => state.auth.notification,
-    shallowEqual
-  );
-
-  const signedIn: boolean = useSelector(
-    (state: RootReducer) => state.auth.signedIn,
-    shallowEqual
-  );
-
-  useEffect(() => {
-    if (signedIn) {
-      history.push("/");
-    }
-  }, [history, signedIn]);
-
+const SignIn: React.FC<Props> = ({ history }) => {
   const initialState: InitialState = {
     title: `Authorization`,
     inputList: {
@@ -77,29 +55,22 @@ const SignIn: React.FC<Props> = (props) => {
         type: "submit",
         label: "Sign In",
       },
-
       signUp: {
         type: "link",
         label: "Sign Up",
         to: "signup",
         classModifier: "signup",
       },
-      github: {
-        type: "network",
-        name: "github",
-        icon: "github",
-        to: `${process.env.REACT_APP_SERVER_URL}/auth/github`,
-      }, 
-      google: {
-        type: "network",
-        name: "google",
-        icon: "google",
-        to: `${process.env.REACT_APP_SERVER_URL}/auth/google`,
-        bgColor: '#8F6B28'
-      }
     },
   };
+
   const [form, setForm] = useState<InitialState>(initialState);
+  const [authLocal, { loading, error }] = useMutation(AUTH_LOCAL_MUTATION, {
+    onCompleted: () => {
+      history.push("/");
+    },
+    onError: (error) => console.log(error)
+  });
 
   const onChangeHandler: OnChangeHandler = (value, input) => {
     setForm((state: InitialState) => {
@@ -109,12 +80,10 @@ const SignIn: React.FC<Props> = (props) => {
   };
 
   const onSubmitHandler: OnSubmitHandler = async (data) => {
-    await dispatch(
-      actions.signInUser({
-        email: data.email,
-        password: data.password,
-      })
-    );
+    await authLocal({ variables: {
+      email: data.email,
+      password: data.password,
+    }})
   };
 
   return (
@@ -124,7 +93,8 @@ const SignIn: React.FC<Props> = (props) => {
         onSubmit={onSubmitHandler}
         onChangeHandler={onChangeHandler}
       />
-      {notification ? <Notification notification={notification} /> : null}
+      {loading ? <Notification notification={{message: "Loading....", type: 'pending'}} /> : null}
+      {error ? <Notification notification={{message: error.message, type: 'error'}} /> : null}
     </div>
   );
 };

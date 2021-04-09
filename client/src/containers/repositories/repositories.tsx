@@ -1,31 +1,34 @@
-import React, { useState, useCallback } from "react";
-import { shallowEqual, useSelector, useDispatch } from "react-redux";
+import React, { useState } from "react";
 import classes from "./repositories.module.scss";
 import ButtonLink from "../../components/UI/buttonLink/buttonLink";
 import Table from "../../components/UI/table/table";
-import { actions } from "../../storeReduxToolkit/repositories/slices";
-import { RootReducer } from "../../types/storeReduxToolkit/rootReducer";
-import { User } from "../../types/storeReduxToolkit/auth/slices";
-import { Repository } from "../../types/storeReduxToolkit/repositories/slices";
-import { AppDispatch } from "../../storeReduxToolkit/configStore";
 import { InitialState } from "../../types/containers/repositories";
+import { useMutation, useQuery } from '@apollo/client';
+import { REPOSITORIES_QUERY, REMOVE_REPOSITORY_MUTATION } from "./query";
+import { CURRENT_USER_QUERY } from "../header/query";
+import Notification from "../../components/UI/notification/notification";
 
 const Repositories: React.FC = () => {
-  const dispatch: AppDispatch = useDispatch();
+  const userQuery = useQuery(CURRENT_USER_QUERY);
+  const repositoriesQuery = useQuery(REPOSITORIES_QUERY);
 
-  const signedIn: boolean = useSelector(
-    (state: RootReducer) => state.auth.signedIn,
-    shallowEqual
-  );
+  const [removeRepository, removeRepositoryQuery] = useMutation(REMOVE_REPOSITORY_MUTATION, {
+    update: (cache, {data}) => {
+      const { _id } = data.removeRepository;
+      const { repositories }:any = cache.readQuery({query:REPOSITORIES_QUERY});
 
-  const user: User | undefined = useSelector(
-    (state: RootReducer) => state.auth.user,
-    shallowEqual
-  );
-  const repositories: Repository[] = useSelector(
-    (state: RootReducer) => state.repositories.repositories,
-    shallowEqual
-  );
+      if(!_id && !repositories) return null;
+
+      const newRepositories = repositories.filter((el: any) => el._id !== _id );
+      cache.writeQuery({
+        query: REPOSITORIES_QUERY,
+        data: { repositories: [...newRepositories] },
+      });
+    }
+  });
+
+  const { currentUser } = userQuery?.data || false;
+  const { repositories } = repositoriesQuery.data || false;
 
   const initialState: InitialState = {
     buttonLink: {
@@ -40,29 +43,34 @@ const Repositories: React.FC = () => {
 
   const [table] = useState<InitialState>(initialState);
 
-  const deleteRepositoryHandler = useCallback(
-    (id: string) => dispatch(actions.deleteRepository(id)),
-    [dispatch]
-  );
+  const removeRepositoryHandler = (id: string) => removeRepository({ variables: { id } });
 
   return (
     <main className={classes.main}>
       <div className={classes.main__wrapper}>
-        {signedIn && user?.signedBy !== "github" ? (
+        {currentUser && currentUser?.signedBy !== "github" ? (
           <ButtonLink
             to={table.buttonLink.to}
             label={table.buttonLink.label}
             classModifier={table.buttonLink.classModifier}
-          />
-        ) : null}
-        <Table
-          tableHeader={table.tableHeader}
-          tableBody={repositories}
-          deleteRowHandler={deleteRepositoryHandler}
-          page="repository"
-          signedIn={signedIn}
-          user={user}
-        />
+          />) : null
+        }
+        {removeRepositoryQuery.loading || repositoriesQuery.loading ?  
+          <Notification notification={{message: "Loading....", type: 'pending'}} /> : null
+        }
+        {removeRepositoryQuery.data ?
+          <Notification notification={{message: "Repository successfully removed!", type: 'success'}} /> : null
+        }
+        {repositoriesQuery.data ? 
+          <Table
+            tableHeader={table.tableHeader}
+            tableBody={repositories}
+            deleteRowHandler={removeRepositoryHandler}
+            page="repository"
+            signedIn={!!currentUser}
+            user={currentUser}
+          /> : null
+        }
       </div>
     </main>
   );

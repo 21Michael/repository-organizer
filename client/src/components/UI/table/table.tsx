@@ -2,8 +2,8 @@ import React from "react";
 import classes from "./table.module.scss";
 import TrHeader from "./components/trHeader/trHeader";
 import TrBody from "./components/trBody/trBody";
-import { Repository } from "../../../types/storeReduxToolkit/repositories/slices";
-import { Note } from "../../../types/storeReduxToolkit/notes/slices";
+import { Repository } from "../../../types/entities/repository";
+import { Note } from "../../../types/entities/note";
 import { Props } from "../../../types/components/table";
 
 const Table: React.FC<Props> = (props) => {

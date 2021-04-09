@@ -1,5 +1,4 @@
 import { RouteComponentProps } from "react-router-dom";
-import { IconName } from "@fortawesome/fontawesome-svg-core";
 
 export interface Props extends RouteComponentProps { }
 interface Input {
@@ -35,7 +34,7 @@ interface Password extends Input {
 export type OnSubmitHandler = (data: {
   email: string;
   password: string;
-}) => Promise<void>;
+}) => void;
 export type OnChangeHandler = (value: string, input: string) => void;
 export interface InputList {
   email: Email;
@@ -58,16 +57,6 @@ export interface InitialState {
       to: string;
       classModifier: string;
     };
-    github: NetworkAuth;
-    google: NetworkAuth;
   };
-}
-
-interface NetworkAuth {
-  type: string;
-  name: string;
-  icon: IconName;
-  to: string;
-  bgColor?: string;
 }
 

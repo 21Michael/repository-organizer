@@ -1,6 +1,6 @@
 import { RouteComponentProps } from "react-router";
 import { History } from "history";
-import { Note } from "../storeReduxToolkit/notes/slices";
+import { Note } from "../entities/note";
 
 interface LocationInterface extends Location {
   state: {

@@ -1,5 +1,5 @@
 import { RouteComponentProps } from "react-router";
-import { Repository } from "../storeReduxToolkit/repositories/slices";
+import { Repository } from "../entities/repository";
 import { History, Location } from "history";
 
 export interface Props extends RouteComponentProps {
@@ -36,14 +36,14 @@ interface CreatedAtInput extends Input {
   };
 }
 
-export type OnSubmitHandler = (repo: Repository) => Promise<void>;
+export type OnSubmitHandler = (repo: Repository) => void;
 export type OnChangeHandler = (value: string, input: string) => void;
 export interface InputList {
   name: NameInput;
   description: DescriptionInput;
   stars: StarsInput;
-  creatorName: CreatorNameInput;
-  createdAt: CreatedAtInput;
+  creator_name: CreatorNameInput;
+  created_at: CreatedAtInput;
   [key: string]:
   | NameInput
   | DescriptionInput

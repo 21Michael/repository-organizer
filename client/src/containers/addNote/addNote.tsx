@@ -1,13 +1,7 @@
-import React, { useState, useEffect, useCallback } from "react";
-import { shallowEqual, useSelector, useDispatch } from "react-redux";
+import React, { useState } from "react";
 import { withRouter } from "react-router";
 import classes from "./addNote.module.scss";
-import Immutable from "seamless-immutable";
 import Time from "../../utiles/time";
-import { actions } from "../../storeReduxToolkit/notes/slices";
-import { RootReducer } from "../../types/storeReduxToolkit/rootReducer";
-import { Repository } from "../../types/storeReduxToolkit/repositories/slices";
-import { AppDispatch } from "../../storeReduxToolkit/configStore";
 import Form from "../../components/UI/form/form";
 import {
   Props,
@@ -16,37 +10,43 @@ import {
   OnChangeHandler,
   OnSubmitHandler,
 } from "../../types/containers/addNote";
+import { useMutation, useQuery } from "@apollo/client";
+import { REPOSITORIES_QUERY } from "../repositories/query";
+import { ADD_NOTE_MUTATION } from "./query";
+import { NOTES_QUERY } from "../notes/query";
 
 const AddNote: React.FC<Props> = (props) => {
-  const dispatch: AppDispatch = useDispatch();
   const history = props.history;
 
-  const repositories: Repository[] = useSelector(
-    (state: RootReducer) =>
-      Immutable.asMutable(state.repositories.repositories),
-    shallowEqual
-  );
+  const [addNote] = useMutation(ADD_NOTE_MUTATION, {
+    onCompleted: () => {
+      history.push("/note");
+    },
+    update: (cache, {data}) => {
+      const { addNote: newNote } = data;
+      const { notes }:any = cache.readQuery({query:NOTES_QUERY});
+
+      if(!newNote && !notes) return null;
+
+      cache.writeQuery({
+        query: NOTES_QUERY,
+        data: { notes: [...notes, newNote] },
+      });
+    }
+  });
+
+  const repositoriesQuery = useQuery(REPOSITORIES_QUERY, {
+    notifyOnNetworkStatusChange: true,
+  });
+
+  const { repositories } = repositoriesQuery.data || false;
+
   const repositoryToSelectInput: RepositoryInput["options"] = repositories.map(
-    (el) => ({
+    (el: any) => ({
       value: el._id,
       label: el.name,
     })
   );
-  const noteAddSuccess: boolean = useSelector(
-    (state: RootReducer) => state.notes.noteAddSuccess,
-    shallowEqual
-  );
-
-  const noteAddSuccessHandler: () => void = useCallback(() => {
-    history.push("/note");
-    dispatch(actions.addNoteFailed());
-  }, [dispatch, history]);
-
-  useEffect(() => {
-    if (noteAddSuccess) {
-      noteAddSuccessHandler();
-    }
-  }, [noteAddSuccess, noteAddSuccessHandler]);
 
   const initialState: InitialState = {
     title: `Add a note`,
@@ -92,17 +92,10 @@ const AddNote: React.FC<Props> = (props) => {
   };
 
   const onSubmitHandler: OnSubmitHandler = async (data) => {
-    const repositoryId: string = data.repository.value;
+    const repository_id: string = data.repository.value;
     const text: string = data.text;
-    const createdAt: string = (Time as Function)().toDateInputValue();
-
-    await dispatch(
-      actions.addNote({
-        repositoryId,
-        text,
-        createdAt,
-      })
-    );
+    const created_at: string = (Time as Function)().toDateInputValue();
+    await addNote({variables: { data: { repository_id, text, created_at } } });
   };
 
   return (

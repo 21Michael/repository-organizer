@@ -1,4 +1,4 @@
-import { Notification } from "../../types/storeReduxToolkit/auth/slices";
+import { Notification } from "../entities/user";
 
 export interface Props {
   notification: Notification;

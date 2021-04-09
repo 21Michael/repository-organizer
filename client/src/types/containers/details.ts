@@ -1,7 +1,7 @@
 import { RouteComponentProps } from "react-router-dom";
 import { History } from "history";
-import { Repository } from "../storeReduxToolkit/repositories/slices";
-import { Note } from "../storeReduxToolkit/notes/slices";
+import { Repository } from "../entities/repository";
+import { Note } from "../entities/note";
 
 export interface Props extends RouteComponentProps {
   location: {

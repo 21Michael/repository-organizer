@@ -1,26 +1,20 @@
-import React, { useState, useCallback } from "react";
-import { shallowEqual, useSelector, useDispatch } from "react-redux";
+import React, { useState } from "react";
 import classes from "./header.module.scss";
-import NavList from "../../components/header/navList/navList";
-import Link from "../../components/UI/link/link";
-import User from "../../components/header/user/user";
-import { actions } from "../../storeReduxToolkit/auth/slices";
-import { RootReducer } from "../../types/storeReduxToolkit/rootReducer";
-import { User as UserInterface } from "../../types/storeReduxToolkit/auth/slices";
-import { AppDispatch } from "../../storeReduxToolkit/configStore";
 import { InitialState } from "../../types/containers/header";
+import { useMutation, useQuery } from "@apollo/client";
+import { CURRENT_USER_QUERY, SIGN_OUT_MUTATION } from "./query";
+import { withRouter } from "react-router";
+import NavList from "../../components/header/navList/navList";
+import User from "../../components/header/user/user";
+import Link from "../../components/UI/link/link";
 
-const Header: React.FC = () => {
-  const dispatch: AppDispatch = useDispatch();
-
-  const user: UserInterface | undefined = useSelector(
-    (state: RootReducer) => state.auth.user,
-    shallowEqual
-  );
-  const signedIn: boolean = useSelector(
-    (state: RootReducer) => state.auth.signedIn,
-    shallowEqual
-  );
+const Header: any = () => {
+  const { client, loading, data } = useQuery(CURRENT_USER_QUERY, {
+    fetchPolicy: 'cache-and-network'
+  });
+  const [signOut] = useMutation(SIGN_OUT_MUTATION, {
+    onCompleted: () => client.resetStore().catch(err => console.log(err)),
+  });
 
   const initialState: InitialState = {
     navList: [
@@ -46,21 +40,18 @@ const Header: React.FC = () => {
 
   const [header] = useState<InitialState>(initialState);
 
-  const logOutButtonHandler: () => void = useCallback(
-    () => dispatch(actions.signOutUser()),
-    [dispatch]
-  );
+  const logOutButtonHandler = () => signOut();
 
   return (
     <header className={classes.header}>
       <div className={classes.header__wrapper}>
         <NavList navList={header.navList} />
         <div className={classes.auth}>
-          {signedIn ? (
+          {!loading && data ? (
             <User
-              name={user?.name}
-              profileURL={user?.profileURL}
-              avatarURL={user?.avatarURL}
+              name={data.currentUser?.user_name}
+              profileURL={data.currentUser?.profile_URL}
+              avatarURL={data.currentUser?.avatar_URL}
               logOutButton={header.logOutButton}
               logOutButtonHandler={logOutButtonHandler}
             />
@@ -73,4 +64,4 @@ const Header: React.FC = () => {
   );
 };
 
-export default Header;
+export default withRouter(Header);

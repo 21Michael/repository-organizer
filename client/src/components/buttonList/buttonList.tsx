@@ -34,6 +34,7 @@ const ButtonList: React.FC<Props> = (props) => {
             icon={props.buttonList[key].icon}
             to={props.buttonList[key].to}
             bgColor={props.buttonList[key].bgColor}
+            key={i}
           />
         )
       : null

@@ -1,4 +1,4 @@
-import { User } from "../storeReduxToolkit/auth/slices";
+import { User } from "../entities/user";
 
 export interface Props {
   titles: string[];

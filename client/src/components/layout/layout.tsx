@@ -1,5 +1,4 @@
-import React, { useEffect, useCallback } from "react";
-import { useDispatch } from "react-redux";
+import React from "react";
 import classes from "./layout.module.scss";
 import Error from "../../containers/error/error";
 import Header from "../../containers/header/header";
@@ -13,19 +12,8 @@ import Notes from "../../containers/notes/notes";
 import SignIn from "../../containers/signIn/signIn";
 import SignUp from "../../containers/signUp/signUp";
 import { Switch, Route, Redirect } from "react-router-dom";
-import { actions } from "../../storeReduxToolkit/auth/slices";
 
 const Layout: React.FC = () => {
-  const dispatch = useDispatch();
-
-  const fetchCurrentUser = useCallback(() => {
-    dispatch(actions.fetchCurrentUser());
-  }, [dispatch]);
-
-  useEffect(() => {
-    fetchCurrentUser();
-  }, [fetchCurrentUser]);
-
   return (
     <div className={classes.wrapper}>
       <Header />

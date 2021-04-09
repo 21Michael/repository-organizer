@@ -1,3 +1,4 @@
+import { formatDate } from '../../utiles/date';
 import { Schema } from 'mongoose';
 
 const RepositoryService = class {
@@ -5,40 +6,37 @@ const RepositoryService = class {
   constructor(model) {
     this.repositoryModel = model;
   }
-  findAll() {
-    return this.repositoryModel.find();
+  async findAll() {
+    const repositories = await this.repositoryModel.find();
+    return formatDate(repositories, 'YYYY-MM-DD');
   }
-  findOne({ id }) {
-    return this.repositoryModel.findOne({
+  async findOne({ id }) {
+    return await this.repositoryModel.findOne({
       _id: id,
     });
   }
-  createRepository({ name, description, stars, creatorName, createdAt }) {
-    return new this.repositoryModel({
+  async createRepository({ name, description, stars, creator_name, created_at }) {
+    const newRepository = await new this.repositoryModel({
       name,
       description,
       stars,
-      creator_name: creatorName,
-      created_at: createdAt,
+      creator_name,
+      created_at
     }).save();
+    return formatDate(newRepository, 'YYYY-MM-DD');
   }
-  deleteOne({ id }) {
-    return this.repositoryModel.deleteOne({
+  async deleteOne({ id }) {
+    return await this.repositoryModel.deleteOne({
       _id: id,
     });
   }
-  async updateOne({ id, name, description, stars, creatorName, createdAt }) {
-    const repository: Schema = await this.repositoryModel.findOne({
-      _id: id,
-    });
-    if (repository) {
-      repository.name = name;
-      repository.description = description;
-      repository.stars = stars;
-      repository.creator_name = creatorName;
-      repository.created_at = createdAt;
-      return repository.save();
+  async updateOne({ _id, ...rest }) {
+    const repository: Schema = await this.repositoryModel.findOne({ _id });
+    for (let key in rest) {
+      repository[key] = rest[key]
     }
+    await repository.save();
+    return formatDate(repository, 'YYYY-MM-DD');
   }
 };
 

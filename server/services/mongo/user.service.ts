@@ -5,42 +5,42 @@ const UserService = class {
   constructor(model) {
     this.userModel = model;
   }
-  findOne({ id }) {
-    return this.userModel.findOne({ _id: id });
+  async findOne({ id }) {
+    return await this.userModel.findOne({ _id: id });
   }
-  findOneByEmail({ email }) {
-    return this.userModel.findOne({ email });
+  async findOneByEmail({ email }) {
+    return await this.userModel.findOne({ email });
   }
-  findOneByGitHubId({ id }) {
-    return this.userModel.findOne({ github_id: id });
+  async findOneByGitHubId({ id }) {
+    return await this.userModel.findOne({ github_id: id });
   }
-  createUser({ name, email, signedBy, password }) {
-    return new this.userModel({
-      user_name: name,
-      signed_by: signedBy,
+  async createUser({ user_name, email, signed_by, password }) {
+    return await new this.userModel({
+      user_name,
+      signed_by,
       email,
       password,
     }).save();
   }
-  createUserGitHub({ name, signedBy, githubId, avatarURL, profileURL }) {
-    return new this.userModel({
-      user_name: name,
-      signed_by: signedBy,
-      github_id: githubId,
-      avatar_url: avatarURL,
-      profile_url: profileURL,
+  async createUserGitHub({ user_name, signed_by, github_id, avatar_url, profile_url }) {
+    return await new this.userModel({
+      user_name,
+      signed_by,
+      github_id,
+      avatar_url,
+      profile_url,
     }).save();
   }
-  createUserGoogle({ name, signedBy, avatarURL, email }) {
-    return new this.userModel({
-      user_name: name,
-      signed_by: signedBy,
-      avatar_url: avatarURL,
-      email: email
+  async createUserGoogle({ user_name, signed_by, avatar_url, email }) {
+    return await new this.userModel({
+      user_name,
+      signed_by,
+      avatar_url,
+      email
     }).save();
   }
-  deleteOne({ id }) {
-    return this.userModel.deleteOne({ _id: id });
+  async deleteOne({ id }) {
+    return await this.userModel.deleteOne({ _id: id });
   }
 };
 
