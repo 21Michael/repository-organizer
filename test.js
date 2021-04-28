@@ -5,3 +5,6 @@
 //first commit rebase
 //second commit rebase
 //third commit rebase
+
+//first commit merge
+//second commit merge
