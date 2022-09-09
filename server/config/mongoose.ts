@@ -6,6 +6,7 @@ mongoose.plugin(toJson); // _id => id
 
 const URI: string = process.env.ATLAS_URI;
 
+
 const mongooseConnectionOptions: MongooseConnectionOptions = {
   useNewUrlParser: true,
   useCreateIndex: true,
@@ -13,11 +14,17 @@ const mongooseConnectionOptions: MongooseConnectionOptions = {
 }
 
 const mongoDBConnection = async () => {
-  await mongoose.connect(URI, mongooseConnectionOptions);
-  const connection: Connection = mongoose.connection;
-  await connection.once("open", () => {
+  try {
+    await mongoose.connect(URI, mongooseConnectionOptions);
+    const connection: Connection = mongoose.connection;
+    await connection.once("open", () => {
+      console.log("MongoDB connected with server");
+    });
     console.log("MongoDB connected with server");
-  });
+  } catch (e) {
+    console.log("MongoDB connection error:", e);
+  }
+
 };
 
 export const mongoDBConnectionClose = async () => {

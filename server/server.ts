@@ -1,4 +1,5 @@
 import { CookieOptions } from './types/server';
+import mongoDBConnection from "./config/mongoose";
 import express, { Request, Response, Express } from "express";
 import path from 'path'
 import cors from "cors";
@@ -28,21 +29,26 @@ app.use(passport.session());
 
 const mode: string = process.env.NODE_ENV;
 
-try {
-  app.use('/', routes);
-  if (mode === "production ") {
-    app.use(express.static("../client/build"));
-    app.get("*", (req: Request, res: Response) => {
-      res.sendFile(path.resolve(__dirname, "/index.html"));
+const start = async () => {
+  try {
+    await mongoDBConnection()
+    app.use('/', routes);
+    if (mode === "production ") {
+      app.use(express.static("../client/build"));
+      app.get("*", (req: Request, res: Response) => {
+        res.sendFile(path.resolve(__dirname, "/index.html"));
+      });
+    }
+    app.listen(port, () => {
+      console.log("Server works on port: " + port);
     });
+  } catch (error) {
+    console.log("Error: " + error);
+    process.exit(1);
   }
-  app.listen(port, () => {
-    console.log("Server works on port: " + port);
-  });
-} catch (error) {
-  console.log("Error: " + error);
-  process.exit(1);
 }
+
+start()
 
 export default app
 

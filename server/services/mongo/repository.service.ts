@@ -6,7 +6,11 @@ const RepositoryService = class {
     this.repositoryModel = model;
   }
   findAll() {
-    return this.repositoryModel.find();
+    try {
+      return this.repositoryModel.find();
+    } catch (e) {
+      console.log('Error:', e)
+    }
   }
   findOne({ id }) {
     return this.repositoryModel.findOne({

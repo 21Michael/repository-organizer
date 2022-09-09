@@ -11,6 +11,7 @@ const Repository = db.Repository;
 const getAllRepositories = async (req: Request, res: Response) => {
   try {
     const repositories: RepositoryModelPostgres[] | RepositoryModelMongo[] = await Repository.findAll();
+    console.log(repositories)
     if (repositories) {
       res.json(repositories);
     }
