@@ -1,0 +1,41 @@
+version: "2.6"
+
+services:
+  client:
+    build: ./client
+    ports:
+      - 3001:3000
+    volumes:
+      - ./client:/usr/project/client:ro
+    container_name: repository-organizer-client
+    healthcheck:
+      test: curl -f localhost:3000/
+      interval: 10s
+      timeout: 10s
+      retries: 3
+    depends_on:
+      server:
+        condition: service_healthy
+    stdin_open: true
+#    networks:
+#      - back
+
+  server:
+    build: ./server
+    environment:
+      - REDIRECT_URL=http://localhost:3001
+      - PORT=4000
+    volumes:
+      - ./server:/usr/project/server
+    container_name: repository-organizer-server
+    healthcheck:
+      test: curl -f localhost:4000/repositories
+      interval: 10s
+      timeout: 10s
+      retries: 3
+#    networks:
+#      - back
+
+networks:
+  back:
+    driver: bridge
