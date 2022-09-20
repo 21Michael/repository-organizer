@@ -21,7 +21,7 @@ const signByGitHub = (req: Request, res: Response) => {
       if (error) {
         return res.status(500).send(error.message);
       }
-      return res.redirect(`${process.env.LOCAL_HOST}`);
+      return res.redirect(`${process.env.REDIRECT_URL}`);
     });
   })(req, res);
 }

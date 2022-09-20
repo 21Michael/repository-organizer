@@ -11,7 +11,7 @@ import morgan from "morgan";
 import routes from './routes/index'
 
 const app: Express = express();
-const port: string | number = process.env.PORT || 3000;
+const port: string | number = process.env.PORT || 4000;
 
 const cookieOptions: CookieOptions = {
   maxAge: 30 * 24 * 60 * 60 * 1000,
