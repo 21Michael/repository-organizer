@@ -2,6 +2,7 @@ version: "2.6"
 
 services:
   client:
+    image: 995353575805.dkr.ecr.us-east-1.amazonaws.com/repository-organizer-client
     build: ./client
     ports:
       - 3001:3000
@@ -21,6 +22,7 @@ services:
 #      - back
 
   server:
+    image: 995353575805.dkr.ecr.us-east-1.amazonaws.com/repository-organizer-server
     build: ./server
     environment:
       - REDIRECT_URL=http://localhost:3001
