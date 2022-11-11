@@ -1,23 +1,22 @@
-FROM ubuntu
+FROM node:14
 
-ENV PROJ_DIR "/usr/project"
-ENV SERVER_DIR "${PROJ_DIR}/server"
-
-RUN apt-get update \
-    && apt install sudo -y \
-    && sudo apt install curl -y \
-    && curl -sL https://deb.nodesource.com/setup_14.x | sudo -E bash - \
-    && sudo apt install nodejs
-
-WORKDIR ${PROJ_DIR}
-
-COPY . .
+ENV SERVER_DIR "$/app/server"
+#
+#RUN apt-get update \
+#    && apt install sudo -y \
+#    && sudo apt install curl -y \
+#    && curl -sL https://deb.nodesource.com/setup_14.x | sudo -E bash - \
+#    && sudo apt install nodejs
 
 WORKDIR ${SERVER_DIR}
+
+COPY package.json ./
 
 RUN npm i \
     && npm audit fix
 
-CMD ["npm", "run", "start"]
+COPY . .
 
 EXPOSE 4000
+
+CMD ["npm", "run", "prod"]
