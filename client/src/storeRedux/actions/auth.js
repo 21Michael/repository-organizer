@@ -1,5 +1,5 @@
 import { ADD_USER, DELETE_USER } from "./actionTypes.js";
-import axios from "axios";
+import axios from "../../utiles/axios";
 import { fetchRepositories, fetchGithubRepositories } from "./repositories.js";
 
 export function signUpUser(user) {

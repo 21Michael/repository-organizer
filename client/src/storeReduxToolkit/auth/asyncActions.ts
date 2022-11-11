@@ -1,6 +1,6 @@
-import { ThunkApi } from './../../types/storeReduxToolkit/configStore';
-import { User } from './../../types/storeReduxToolkit/auth/slices';
-import axios from "axios";
+import { ThunkApi } from '../../types/storeReduxToolkit/configStore';
+import { User } from '../../types/storeReduxToolkit/auth/slices';
+import axios from "../../utiles/axios";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { actions } from "./slices";
 import { actions as actionsRepositories } from "../repositories/slices";

@@ -1,5 +1,5 @@
 import { DELETE_REPO, ADD_REPOS } from "./actionTypes.js";
-import axios from "axios";
+import axios from "../../utiles/axios";
 import TimeValidation from "../../utiles/time.js";
 
 const CLIENT_ID = process.env.GITHUB_CLIENT_ID;

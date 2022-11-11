@@ -1,7 +1,7 @@
 import types from "../types.js";
 import { call, put, takeEvery } from "redux-saga/effects";
 import TimeValidation from "../../../utiles/time.js";
-import axios from "axios";
+import axios from "../../../utiles/axios";
 import actions from "../actions.js";
 
 function fetchNotes() {

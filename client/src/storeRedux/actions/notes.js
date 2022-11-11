@@ -1,5 +1,5 @@
 import { DELETE_NOTE, ADD_NOTES } from "./actionTypes.js";
-import axios from "axios";
+import axios from "../../utiles/axios";
 import TimeValidation from "../../utiles/time.js";
 
 export function fetchNotes() {

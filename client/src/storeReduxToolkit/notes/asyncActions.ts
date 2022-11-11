@@ -1,6 +1,6 @@
 import { ThunkApi } from './../../types/storeReduxToolkit/configStore';
 import { Note } from './../../types/storeReduxToolkit/notes/slices';
-import axios from "axios";
+import axios from "../../utiles/axios";
 import TimeValidation from "../../utiles/time";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { actions } from "./slices";
