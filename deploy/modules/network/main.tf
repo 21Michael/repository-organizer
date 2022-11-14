@@ -191,17 +191,6 @@ resource "aws_security_group" "repository-organizer-client-public" {
       description      = "HTTP"
     },
     {
-      from_port        = 4000
-      to_port          = 4000
-      protocol         = "tcp"
-      cidr_blocks      = []
-      ipv6_cidr_blocks = []
-      prefix_list_ids  = []
-      security_groups  = ["sg-000e6382022319655"]
-      self             = false
-      description      = "Custom TCP"
-    },
-    {
       from_port        = 22
       to_port          = 22
       protocol         = "tcp"
