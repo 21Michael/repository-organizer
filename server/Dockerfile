@@ -1,7 +1,7 @@
 FROM node:14
 
 ENV SERVER_DIR "$/app/server"
-#
+
 #RUN apt-get update \
 #    && apt install sudo -y \
 #    && sudo apt install curl -y \
