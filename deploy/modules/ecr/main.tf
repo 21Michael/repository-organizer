@@ -5,10 +5,10 @@ resource aws_ecr_repository "repository-organizer-client" {
   image_scanning_configuration {
     scan_on_push = true
   }
-#  encryption_configuration {
-#    encryption_type = "KMS"
-#    kms_key = var.repository_organizer_key.arn
-#  }
+  encryption_configuration {
+    encryption_type = "KMS"
+    kms_key = var.kms_key.arn
+  }
 }
 
 resource aws_ecr_repository "repository-organizer-server" {
@@ -18,8 +18,8 @@ resource aws_ecr_repository "repository-organizer-server" {
   image_scanning_configuration {
     scan_on_push = true
   }
-#  encryption_configuration {
-#    encryption_type = "KMS"
-#    kms_key = var.repository_organizer_key.arn
-#  }
+  encryption_configuration {
+    encryption_type = "KMS"
+    kms_key = var.kms_key.arn
+  }
 }

@@ -8,7 +8,8 @@ resource "aws_ecs_service" "repository-organizer-client" {
   task_definition = var.taskdef_repository_organizer_client.arn
   launch_type = "EC2"
   desired_count = 1
-  force_new_deployment = true
+  deployment_maximum_percent         = 100
+  deployment_minimum_healthy_percent = 0
 #  network_configuration {
 #    subnets = [
 #      var.subnet_repository_organizer_client_public.id

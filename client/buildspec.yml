@@ -1,0 +1,17 @@
+version: 0.2
+phases:
+  install:
+    runtime-versions:
+      docker: 18
+  build:
+    commands:
+      - apt-get install jq -y
+      - ContainerName="repository-organizer-client"
+      - ImageURI=$(cat imageDetail.json | jq -r '.ImageURI')
+      - printf '[{"name":"CONTAINER_NAME","imageUri":"IMAGE_URI"}]' > imagedefinitions.json
+      - sed -i -e "s|CONTAINER_NAME|repository-organizer-client|g" imagedefinitions.json
+      - sed -i -e "s|IMAGE_URI|995353575805.dkr.ecr.eu-west-2.amazonaws.com/repository-organizer-client:latest|g" imagedefinitions.json
+      - cat imagedefinitions.json
+artifacts:
+  files:
+    - imagedefinitions.json

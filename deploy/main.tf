@@ -15,15 +15,22 @@ provider "aws" {
 
 module "iam" {
   source = "./modules/iam"
-  repository_organizer_repositories = {
+  repositories = {
     "client": module.ecr.repository_repository_organizer_client
     "server": module.ecr.repository_repository_organizer_server
   }
+  s3_bucket = module.s3.codepipeline_bucket
+  kms_key   = module.kms.key_codepipeline
+  codepipeline = module.codepipeline.aws_codepipeline
 }
 
 module "kms" {
   source   = "./modules/kms"
   app_name = var.app_name
+}
+
+module "s3" {
+  source   = "./modules/s3"
 }
 
 module "ec2" {
@@ -79,9 +86,34 @@ module "ecs" {
 }
 
 module "ecr" {
-  source                   = "./modules/ecr"
-  repository_organizer_key = module.kms.repository_organizer_key_ecr
-  app_name                 = var.app_name
+  source   = "./modules/ecr"
+  kms_key  = module.kms.key_ecr
+  app_name = var.app_name
 }
 
+module "cloudwatch" {
+  source   = "./modules/cloudwatch"
+  app_name = var.app_name
+  ecr_repository = module.ecr.repository_repository_organizer_client
+  codepipeline = module.codepipeline.aws_codepipeline
+  iam_role = module.iam.cloudwatchevent_iam_role
+}
+
+module "codebuild" {
+  source             = "./modules/codebuild"
+  app_name           = var.app_name
+  codebuild_iam_role = module.iam.codebuild_iam_role
+}
+
+module "codepipeline" {
+  app_name               = var.app_name
+  source                 = "./modules/codepipeline"
+  codepipeline_iam_role  = module.iam.codepipeline_iam_role
+  codepipeline_s3_bucket = module.s3.codepipeline_bucket
+  kms_key                = module.kms.key_codepipeline
+  ecr_repository         = module.ecr.repository_repository_organizer_client
+  aws_codebuild_project  = module.codebuild.aws_codebuild_project
+  aws_ecs_cluster        = module.ecs.aws_ecs_cluster
+  aws_ecs_service        = module.ecs.aws_ecs_service_client
+}
 

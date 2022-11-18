@@ -1,4 +1,4 @@
-variable "repository_organizer_key" {
+variable "kms_key" {
   type = object({
     arn = string
   })
