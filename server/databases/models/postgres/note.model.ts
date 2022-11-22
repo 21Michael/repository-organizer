@@ -1,8 +1,7 @@
 import { DataTypes } from "sequelize";
 import connection from "../../../config/sequelize";
-import { NoteStatic } from '../../../types/databases/models/postgres/note'
 
-const NoteModel: NoteStatic = connection.define("notes", {
+const NoteModel = connection.define("notes", {
   id: {
     allowNull: false,
     type: DataTypes.UUID,
@@ -39,6 +38,6 @@ const NoteModel: NoteStatic = connection.define("notes", {
   },
 });
 
-//NoteModel.sync({ force: true })
+// NoteModel.sync({ force: true })
 
 export default NoteModel;

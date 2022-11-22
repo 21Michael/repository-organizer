@@ -1,8 +1,7 @@
 import { DataTypes } from "sequelize";
 import connection from "../../../config/sequelize";
-import { UserStatic } from '../../../types/databases/models/postgres/user'
 
-const UserModel: UserStatic = connection.define("users", {
+const UserModel = connection.define("users", {
   id: {
     allowNull: false,
     type: DataTypes.UUID,

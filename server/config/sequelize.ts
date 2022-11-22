@@ -12,6 +12,6 @@ const sequelizeConnectionOptions: ConnectionOptions = {
     logging: false,
 }
 
-const connection: Sequelize = new Sequelize(process.env.PGDATABASE, process.env.PGUSER, process.env.PGPASSWORD, sequelizeConnectionOptions);
+const sequelize = new Sequelize(process.env.PGDATABASE, process.env.PGUSER, process.env.PGPASSWORD, sequelizeConnectionOptions);
 
-export default connection;
+export default sequelize;

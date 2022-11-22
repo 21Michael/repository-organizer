@@ -1,4 +1,4 @@
-import { NoteStatic } from './../../types/databases/models/postgres/note';
+import { NoteStatic } from '../../types/databases/models/postgres/note';
 
 const NoteService = class {
   private noteModel: NoteStatic;

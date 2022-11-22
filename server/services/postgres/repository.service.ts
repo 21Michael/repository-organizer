@@ -1,4 +1,4 @@
-import { RepositoryStatic } from './../../types/databases/models/postgres/repository';
+import { RepositoryStatic } from '../../types/databases/models/postgres/repository';
 
 const RepositoryService = class {
   private repositoryModel: RepositoryStatic;

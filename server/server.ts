@@ -8,6 +8,7 @@ import 'dotenv/config';
 import logger, { morganOption } from "./config/winston";
 import morgan from "morgan";
 import routes from './routes/index'
+import sequelize from './config/sequelize'
 
 const app: Express = express();
 const port: string | number = process.env.PORT || 3000;
@@ -28,21 +29,28 @@ app.use(passport.session());
 
 const mode: string = process.env.NODE_ENV;
 
-try {
-  app.use('/', routes);
-  if (mode === "production ") {
-    app.use(express.static("../client/build"));
-    app.get("*", (req: Request, res: Response) => {
-      res.sendFile(path.resolve(__dirname, "/index.html"));
+const start = async () => {
+  try {
+    await sequelize.authenticate();
+    await sequelize.sync();
+
+    app.use('/', routes);
+    if (mode === "production ") {
+      app.use(express.static("../client/build"));
+      app.get("*", (req: Request, res: Response) => {
+        res.sendFile(path.resolve(__dirname, "/index.html"));
+      });
+    }
+    app.listen(port, () => {
+      console.log("Server works on port: " + port);
     });
+  } catch (error) {
+    console.log("Error: " + error);
+    process.exit(1);
   }
-  app.listen(port, () => {
-    console.log("Server works on port: " + port);
-  });
-} catch (error) {
-  console.log("Error: " + error);
-  process.exit(1);
 }
 
-export default app
+start();
+
+export default app;
 

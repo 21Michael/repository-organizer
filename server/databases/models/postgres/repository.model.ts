@@ -1,8 +1,7 @@
 import { DataTypes } from "sequelize";
 import connection from "../../../config/sequelize";
-import { RepositoryStatic } from '../../../types/databases/models/postgres/repository'
 
-const RepositoryModel: RepositoryStatic = connection.define("repositories", {
+const RepositoryModel = connection.define("repositories", {
   id: {
     allowNull: false,
     type: DataTypes.UUID,
