@@ -4,7 +4,10 @@ import "normalize.css";
 import "reset-css";
 import "./index.css";
 import App from "./App";
+import axios from "axios";
 import * as serviceWorker from "./serviceWorker";
+
+axios.defaults.baseURL = process.env.REACT_APP_SERVER_URL
 
 ReactDOM.render(
   <React.StrictMode>

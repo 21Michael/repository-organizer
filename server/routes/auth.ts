@@ -1,4 +1,4 @@
-import { DbError } from './../types/routes/auth';
+import { DbError } from '../types/routes/auth';
 import { UserModel as UserModelMongo } from './../types/databases/models/mongo/user';
 import { UserModel as UserModelPostgres } from './../types/databases/models/postgres/user';
 import createRouter, { Request, Response } from "express";
@@ -21,7 +21,7 @@ const signByGitHub = (req: Request, res: Response) => {
       if (error) {
         return res.status(500).send(error.message);
       }
-      return res.redirect(`${process.env.LOCAL_HOST}`);
+      return res.redirect(`${process.env.REDIRECT_URL}`);
     });
   })(req, res);
 }
@@ -36,6 +36,7 @@ const signOut = async (req: Request, res: Response) => {
 };
 
 const currentUser = (req: Request, res: Response) => {
+  console.log(req.user)
   return req.user
     ? res.json(req.user)
     : res.status(401).send("No one user currently logged in");

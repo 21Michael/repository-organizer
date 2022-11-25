@@ -1,6 +1,6 @@
-import { RepositoryGitHubResponse } from './../../types/storeReduxToolkit/repositories/asyncActions';
-import { ThunkApi } from './../../types/storeReduxToolkit/configStore';
-import { Repository } from './../../types/storeReduxToolkit/repositories/slices';
+import { RepositoryGitHubResponse } from '../../types/storeReduxToolkit/repositories/asyncActions';
+import { ThunkApi } from '../../types/storeReduxToolkit/configStore';
+import { Repository } from '../../types/storeReduxToolkit/repositories/slices';
 import axios from "axios";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import TimeValidation from "../../utiles/time";

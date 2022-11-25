@@ -54,7 +54,7 @@ const UserModel = connection.define("users", {
   },
 },
   {
-    timestamps: true,
+    timestamps: false
   });
 
 export default UserModel;
