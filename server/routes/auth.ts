@@ -36,7 +36,7 @@ const signOut = async (req: Request, res: Response) => {
 };
 
 const currentUser = (req: Request, res: Response) => {
-  console.log(req.user)
+  console.log('!!!!!!!!!!!!!!!currentUser:', req.user)
   return req.user
     ? res.json(req.user)
     : res.status(401).send("No one user currently logged in");
@@ -62,7 +62,7 @@ const signIn = (req: Request, res: Response) => {
   passport.authenticate("local", function (error: DbError, user: UserModelMongo | UserModelPostgres, info: { message: string }) {
     if (error) {
       if (error.name === 'MongoError' && error.code === 11000) {
-        error.message = 'Invalid email: email must be unique!';
+        error.message = 'Invalid email: user already logged in!';
       }
       return res.status(401).send(error.message);
     }
@@ -75,6 +75,8 @@ const signIn = (req: Request, res: Response) => {
       }
       return res.send("User signed in!");
     });
+    console.log('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
+    console.log(req.user)
   })(req, res)
 }
 

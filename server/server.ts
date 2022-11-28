@@ -1,14 +1,14 @@
 import { CookieOptions } from './types/server';
 import express, { Request, Response, Express } from "express";
-import path from 'path'
+import path from 'path';
 import cors from "cors";
 import cookieSession from "cookie-session";
 import passport from "passport";
 import 'dotenv/config';
 import logger, { morganOption } from "./config/winston";
 import morgan from "morgan";
-import routes from './routes/index'
-import sequelize from './config/sequelize'
+import routes from './routes/index';
+import sequelize from './config/sequelize';
 
 const app: Express = express();
 const port: string | number = process.env.PORT || 4000;
@@ -17,7 +17,7 @@ const cookieOptions: CookieOptions = {
   maxAge: 30 * 24 * 60 * 60 * 1000,
   keys: [process.env.COOKIE_KEY],
   resave: false,
-  saveUninitialized: false,
+  saveUninitialized: true,
 }
 
 app.use(morgan("combined", morganOption));
