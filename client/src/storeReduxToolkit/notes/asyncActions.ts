@@ -16,7 +16,7 @@ export const addNote = createAsyncThunk(
       if (response) {
         const newNoteId: string = response.headers.location.match(/(?<=\/\w+\/).+/g)[0];
         thunkApi.dispatch(
-          actions.addNoteSuccess({ id: newNoteId, _id: newNoteId, ...note, })
+          actions.addNoteSuccess({ id: newNoteId, _id: newNoteId, ...note })
         );
       }
     } catch (error) {

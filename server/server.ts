@@ -21,7 +21,13 @@ const cookieOptions: CookieOptions = {
 }
 
 app.use(morgan("combined", morganOption));
-app.use(cors());
+app.use(
+  cors({
+    credentials: true,
+    origin: process.env.REDIRECT_URL,
+    exposedHeaders: ['location']
+  }),
+);
 app.use(express.json());
 app.use(cookieSession(cookieOptions));
 app.use(passport.initialize());

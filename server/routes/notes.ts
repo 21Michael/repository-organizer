@@ -9,7 +9,7 @@ import { RequestInterface } from '../types/routes/notes'
 const router = createRouter.Router();
 const Note = db.Note;
 
-const getAllNotes = async (req: RequestInterface, res: Response) => {
+const getAllNotes = async (req, res) => {
   try {
     const id: string = req.user.id;
     const notes: NoteModelPostgres[] | NoteModelMongo[] = await Note.findAll({ id });
@@ -21,7 +21,7 @@ const getAllNotes = async (req: RequestInterface, res: Response) => {
   }
 };
 
-export const addNote = async (req: RequestInterface, res: Response) => {
+export const addNote = async (req, res) => {
   try {
     const { repositoryId, text, createdAt } = req.body;
     const newNote: NoteModelPostgres | NoteModelMongo = await Note.createNote({
@@ -38,7 +38,7 @@ export const addNote = async (req: RequestInterface, res: Response) => {
   }
 };
 
-const deleteNote = async (req: RequestInterface, res: Response) => {
+const deleteNote = async (req, res) => {
   try {
     await Note.deleteOne({ userId: req.user.id, noteId: req.params.id });
     res.status(204).send();
@@ -47,7 +47,7 @@ const deleteNote = async (req: RequestInterface, res: Response) => {
   }
 };
 
-const editNote = async (req: RequestInterface, res: Response) => {
+const editNote = async (req, res) => {
   try {
     const { text } = req.body;
     await Note.updateOne({ text, userId: req.user.id, noteId: req.params.id });

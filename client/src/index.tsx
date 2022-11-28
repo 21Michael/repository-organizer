@@ -7,6 +7,8 @@ import App from "./App";
 import axios from "axios";
 import * as serviceWorker from "./serviceWorker";
 
+axios.defaults.headers = {'Access-Control-Allow-Origin': '*'};
+axios.defaults.withCredentials = true
 axios.defaults.baseURL = process.env.REACT_APP_SERVER_URL
 
 ReactDOM.render(
