@@ -4,7 +4,6 @@ import createRouter, { Response } from "express";
 import authentication from "../middlewares/authentication";
 import sanitize from "../middlewares/sanitize";
 import db from "../services/index";
-import { RequestInterface } from '../types/routes/notes'
 
 const router = createRouter.Router();
 const Note = db.Note;

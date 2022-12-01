@@ -1,36 +1,62 @@
 import { RepositoryStatic } from '../../types/databases/models/postgres/repository';
 
 const RepositoryService = class {
-  private repositoryModel: RepositoryStatic;
-  constructor(model) {
-    this.repositoryModel = model;
+  private db: RepositoryStatic;
+  private cache: any;
+  private cacheKey: string;
+
+  constructor({ db, cache }) {
+    this.db = db;
+    this.cache = cache;
+    this.cacheKey = JSON.stringify(this.db.tableName);
   }
-  findAll() {
-    return this.repositoryModel.findAll();
+
+  async findAll() {
+    const cachedValues = await this.cache.get(this.cacheKey);
+
+    if(cachedValues) {
+      console.log(`!!!!!!!!!!!!!!!RETURN CACHED VALUES FROM ${this.cacheKey}`)
+      return JSON.parse(cachedValues);
+    }
+    const values = await this.db.findAll();
+
+    await this.cache.set(this.cacheKey, JSON.stringify(values));
+    await this.cache.expire(this.cacheKey, 60 * 60 * 24);
+
+    console.log(`!!!!!!!!!!!!!!!RETURN UNCACHED VALUES FROM ${this.cacheKey}`)
+    return values;
   }
 
   findOne({ id }) {
-    return this.repositoryModel.findOne({ where: { id } })
+    return this.db.findOne({ where: { id } })
   }
 
-  createRepository({ name, description, stars, creatorName, createdAt }) {
-    return this.repositoryModel.create({
+  async createRepository({ name, description, stars, creatorName, createdAt }) {
+    const value = await this.db.create({
       name,
       description,
       stars,
       creator_name: creatorName,
       created_at: createdAt,
     });
+
+    await this.cache.del(this.cacheKey);
+
+    return value;
   }
 
-  deleteOne({ id }) {
-    return this.repositoryModel.destroy({
+  async deleteOne({ id }) {
+    const value = this.db.destroy({
       where: { id },
     });
+
+    await this.cache.del(this.cacheKey);
+
+    return value;
   }
 
-  updateOne({ id, name, description, stars, creatorName, createdAt }) {
-    return this.repositoryModel.update(
+  async updateOne({ id, name, description, stars, creatorName, createdAt }) {
+    const value = this.db.update(
       {
         name,
         description,
@@ -42,6 +68,10 @@ const RepositoryService = class {
         where: { id },
       }
     );
+
+    await this.cache.del(this.cacheKey);
+
+    return value;
   }
 };
 

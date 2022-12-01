@@ -5,11 +5,12 @@ import createRouter, { Request, Response } from "express";
 import passport from "../middlewares/passport";
 import sanitize from "../middlewares/sanitize";
 import db from "../services/index";
+import cacheClient from '../config/redis';
 
 const router = createRouter.Router()
 const UserDB = db.User;
 
-const signByGitHub = (req: Request, res: Response) => {
+const signByGitHub = (req, res) => {
   passport.authenticate("github", function (error: Error, user: UserModelMongo | UserModelPostgres, info: { message: string }) {
     if (error) {
       return res.status(401).send(error.message);
@@ -26,23 +27,28 @@ const signByGitHub = (req: Request, res: Response) => {
   })(req, res);
 }
 
-const signOut = async (req: Request, res: Response) => {
+const signOut = async (req, res) => {
   try {
+    const hashKey = JSON.stringify(req.user.id);
+
     await req.logout();
+
+    console.log(`!!!!!!!!!!!!!!!CLEAN CACHED VALUES FOR ${hashKey}`)
+    await cacheClient.del(hashKey);
+
     res.send("Current user was logged out");
   } catch (err) {
     res.status(400).send(err.message);
   }
 };
 
-const currentUser = (req: Request, res: Response) => {
-  console.log('!!!!!!!!!!!!!!!currentUser:', req.user)
+const currentUser = (req, res) => {
   return req.user
     ? res.json(req.user)
     : res.status(401).send("No one user currently logged in");
 }
 
-const signUp = async (req: Request, res: Response) => {
+const signUp = async (req, res) => {
   try {
     const { name, email, password } = req.body;
     const signedBy = "local";
@@ -58,7 +64,7 @@ const signUp = async (req: Request, res: Response) => {
   }
 }
 
-const signIn = (req: Request, res: Response) => {
+const signIn = (req, res) => {
   passport.authenticate("local", function (error: DbError, user: UserModelMongo | UserModelPostgres, info: { message: string }) {
     if (error) {
       if (error.name === 'MongoError' && error.code === 11000) {
@@ -75,8 +81,6 @@ const signIn = (req: Request, res: Response) => {
       }
       return res.send("User signed in!");
     });
-    console.log('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
-    console.log(req.user)
   })(req, res)
 }
 
